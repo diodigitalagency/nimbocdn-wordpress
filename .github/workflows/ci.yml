@@ -35,12 +35,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: nimbocdn
+      - name: Assemble the plugin package (everything but the repository files in .distignore)
+        run: |
+          set -e
+          mkdir -p build/nimbocdn
+          rsync -a --exclude-from=.distignore --exclude build ./ build/nimbocdn/
+          echo "package:"; find build/nimbocdn -type f | sort
       - name: Plugin Check (all categories, zero errors and zero warnings)
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: nimbocdn
+          build-dir: build/nimbocdn
           include-experimental: true
           # Warnings block too: the bar for this plugin is a clean report.
           ignore-warnings: false
