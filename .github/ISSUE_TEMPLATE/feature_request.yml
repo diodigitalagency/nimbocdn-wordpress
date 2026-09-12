@@ -1,0 +1,20 @@
+name: Feature request
+description: Something you would like the plugin to do
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What you are trying to do and what gets in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like to happen
+  - type: textarea
+    id: measure
+    attributes:
+      label: How we would know it worked
+      description: A number, a page, a before/after. Numbers beat adjectives.

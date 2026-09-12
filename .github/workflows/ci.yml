@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    name: PHP ${{ matrix.php }} syntax
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: php -l on every file
+        run: |
+          set -e
+          find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l >/dev/null
+          echo "all files parse on PHP ${{ matrix.php }}"
+
+  plugin-check:
+    name: WordPress Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: nimbocdn
+      - name: Plugin Check (all categories, zero errors and zero warnings)
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: nimbocdn
+          include-experimental: true
+          # Warnings block too: the bar for this plugin is a clean report.
+          ignore-warnings: false
+          ignore-errors: false
+
+  headers:
+    name: Version and header consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Plugin header, constant and Stable tag agree
+        run: |
+          set -e
+          header=$(sed -n 's/^ \* Version: *//p' nimbocdn.php | head -1 | tr -d '[:space:]')
+          const=$(sed -n "s/^const VERSION = '\(.*\)';/\1/p" nimbocdn.php | tr -d '[:space:]')
+          stable=$(sed -n 's/^Stable tag: *//p' readme.txt | tr -d '[:space:]')
+          echo "header=$header const=$const stable=$stable"
+          [ "$header" = "$const" ] && [ "$header" = "$stable" ]
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            [ "v$header" = "${GITHUB_REF_NAME}" ] || { echo "tag ${GITHUB_REF_NAME} does not match version $header"; exit 1; }
+          fi
+      - name: No "Tested up to" in the PHP header (readme only)
+        run: "! grep -q '^ \\* Tested up to' nimbocdn.php"
+      - name: Plugin URI and Author URI differ
+        run: |
+          p=$(sed -n 's/^ \* Plugin URI: *//p' nimbocdn.php); a=$(sed -n 's/^ \* Author URI: *//p' nimbocdn.php)
+          [ -n "$p" ] && [ -n "$a" ] && [ "$p" != "$a" ]

@@ -1,0 +1,1089 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: NimboCDN 0.5.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordpress\n"
+"Last-Translator: DIO Digital\n"
+"Language-Team: Português do Brasil\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-31T01:55:34+00:00\n"
+"PO-Revision-Date: 2026-08-25 12:00+0000\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: nimbocdn\n"
+
+#. Plugin Name of the plugin
+#: nimbocdn.php
+#: includes/class-nimbocdn-settings.php:419
+#: includes/class-nimbocdn-settings.php:420
+#: includes/class-nimbocdn-settings.php:1092
+msgid "NimboCDN"
+msgstr "NimboCDN"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: nimbocdn.php
+msgid "https://nimbocdn.net"
+msgstr "https://nimbocdn.net"
+
+#. Description of the plugin
+#: nimbocdn.php
+msgid "Serves your images resized and in modern formats from our global network, without touching your originals. Deactivate and everything goes back exactly as it was."
+msgstr "Entrega as suas imagens redimensionadas e em formatos modernos a partir da nossa rede global, sem tocar nos seus originais. Desative e tudo volta exatamente ao que era."
+
+#. Author of the plugin
+#: nimbocdn.php
+msgid "DIO Digital"
+msgstr "DIO Digital"
+
+#: includes/class-nimbocdn-settings.php:116
+msgid "NimboCDN: we could not charge your card"
+msgstr "NimboCDN: não conseguimos cobrar seu cartão"
+
+#. translators: %s: number of days remaining
+#: includes/class-nimbocdn-settings.php:121
+#, php-format
+msgid "You have %s day to update your payment method before this site returns to the free plan."
+msgid_plural "You have %s days to update your payment method before this site returns to the free plan."
+msgstr[0] "Você tem %s dia para atualizar sua forma de pagamento antes que este site volte ao plano gratuito."
+msgstr[1] "Você tem %s dias para atualizar sua forma de pagamento antes que este site volte ao plano gratuito."
+
+#: includes/class-nimbocdn-settings.php:125
+msgid "Update your payment method today to keep this site on Pro."
+msgstr "Atualize sua forma de pagamento hoje para manter este site no Pro."
+
+#: includes/class-nimbocdn-settings.php:128
+msgid "Review it now"
+msgstr "Ver agora"
+
+#: includes/class-nimbocdn-settings.php:209
+#: includes/class-nimbocdn-settings.php:2138
+msgid "Measuring…"
+msgstr "Medindo…"
+
+#. translators: %s: seconds
+#: includes/class-nimbocdn-settings.php:211
+#: includes/class-nimbocdn-settings.php:2830
+#, php-format
+msgid "Wait %ss"
+msgstr "Esperar %ss"
+
+#. translators: 1: data center city, 2: milliseconds, for example "9 ms"
+#: includes/class-nimbocdn-settings.php:214
+#, php-format
+msgid "Right now, this computer receives your images from %1$s, in %2$s."
+msgstr "Agora mesmo, este computador recebe suas imagens de %1$s, em %2$s."
+
+#. translators: 1: data center city, 2: milliseconds, for example "9 ms"
+#: includes/class-nimbocdn-settings.php:217
+#, php-format
+msgid "Optimization paused. This computer is answered from %1$s, %2$s away — resume and your images are delivered from there."
+msgstr "Otimização pausada. Este computador é atendido de %1$s, a %2$s — retome e suas imagens passam a ser entregues de lá."
+
+#. translators: %s: data center city
+#: includes/class-nimbocdn-settings.php:222
+#, php-format
+msgid "Right now, this computer receives your images from %s."
+msgstr "Agora mesmo, este computador recebe suas imagens de %s."
+
+#. translators: %s: data center city
+#: includes/class-nimbocdn-settings.php:224
+#, php-format
+msgid "Optimization paused. This computer is answered from %s — resume and your images are delivered from there."
+msgstr "Otimização pausada. Este computador é atendido de %s — retome e suas imagens passam a ser entregues de lá."
+
+#. translators: %s: number of milliseconds
+#: includes/class-nimbocdn-settings.php:232
+#, php-format
+msgid "%s ms"
+msgstr "%s ms"
+
+#: includes/class-nimbocdn-settings.php:233
+#: includes/class-nimbocdn-settings.php:2833
+msgctxt "button: measure again now"
+msgid "Measure now"
+msgstr "Medir agora"
+
+#: includes/class-nimbocdn-settings.php:234
+msgid "Could not measure right now. Your images keep working; try again in a moment."
+msgstr "Não foi possível medir agora. Suas imagens continuam funcionando; tente novamente em instantes."
+
+#. translators: %s: formatted price, for example "R$ 49,90"
+#: includes/class-nimbocdn-settings.php:240
+#, php-format
+msgid "Get Pro — %s/month"
+msgstr "Assinar o Pro — %s/mês"
+
+#: includes/class-nimbocdn-settings.php:474
+msgid "You are not allowed to do this."
+msgstr "Você não tem permissão para fazer isso."
+
+#: includes/class-nimbocdn-settings.php:552
+msgid "Settings"
+msgstr "Configurações"
+
+#: includes/class-nimbocdn-settings.php:566
+msgid "Support"
+msgstr "Suporte"
+
+#. translators: %s: this site's domain
+#: includes/class-nimbocdn-settings.php:581
+#, php-format
+msgid "A question about the NimboCDN plugin on %s (WordPress)"
+msgstr "Uma dúvida sobre o plugin NimboCDN em %s (WordPress)"
+
+#: includes/class-nimbocdn-settings.php:973
+msgid "Domain not verified yet."
+msgstr "Domínio ainda não verificado."
+
+#: includes/class-nimbocdn-settings.php:974
+msgid "Your images are being optimized on the free plan all the same. Upgrading to Pro and managing billing stay locked until the service can confirm this site is yours: it tries to read a small verification file from this site over the internet, and so far it could not."
+msgstr "Suas imagens continuam sendo otimizadas no plano gratuito. Assinar o Pro e gerenciar a cobrança ficam bloqueados até o serviço confirmar que este site é seu: ele tenta ler um pequeno arquivo de verificação neste site pela internet, e até agora não conseguiu."
+
+#. translators: 1: URL pattern of the verification file, 2: URL of the verification route
+#: includes/class-nimbocdn-settings.php:977
+#, php-format
+msgid "If this site runs behind a firewall or a security plugin, allow requests from the user agent NimboCDN-Verify to %1$s (or to %2$s), then press Measure now. It is retried automatically twice a day."
+msgstr "Se este site está atrás de um firewall ou de um plugin de segurança, libere as requisições do user agent NimboCDN-Verify para %1$s (ou para %2$s) e clique em Medir agora. A verificação é repetida automaticamente duas vezes por dia."
+
+#: includes/class-nimbocdn-settings.php:1000
+msgid "Measured. The result is below."
+msgstr "Medido. O resultado está abaixo."
+
+#: includes/class-nimbocdn-settings.php:1001
+msgid "Measured less than a minute ago. Visitor data takes up to a minute to arrive — try again shortly."
+msgstr "Medido há menos de um minuto. Os dados de visitantes levam até um minuto para chegar — tente novamente em instantes."
+
+#: includes/class-nimbocdn-settings.php:1002
+msgid "This site is on the free plan. Upgrade to manage a subscription."
+msgstr "Este site está no plano gratuito. Faça o upgrade para gerenciar uma assinatura."
+
+#: includes/class-nimbocdn-settings.php:1013
+msgid "Your Pro plan was activated directly by our team, so there is no online subscription to manage. For any change, write to hello@nimbocdn.net."
+msgstr "Seu plano Pro foi ativado diretamente pela nossa equipe, então não há uma assinatura online para gerenciar. Para qualquer alteração, escreva para hello@nimbocdn.net."
+
+#: includes/class-nimbocdn-settings.php:1014
+msgid "Could not reach the billing service. Your images keep working; try again in a moment."
+msgstr "Não foi possível acessar o serviço de cobrança. Suas imagens continuam funcionando; tente novamente em instantes."
+
+#: includes/class-nimbocdn-settings.php:1015
+msgid "Could not open the subscription portal. Your images keep working; try again in a moment."
+msgstr "Não foi possível abrir o portal da assinatura. Suas imagens continuam funcionando; tente novamente em instantes."
+
+#: includes/class-nimbocdn-settings.php:1016
+msgid "Billing email updated."
+msgstr "E-mail de cobrança atualizado."
+
+#: includes/class-nimbocdn-settings.php:1017
+msgid "That does not look like an email address."
+msgstr "Isso não parece um endereço de e-mail."
+
+#: includes/class-nimbocdn-settings.php:1018
+msgid "Could not reach the service. The email was not changed — try again in a moment."
+msgstr "Não foi possível acessar o serviço. O e-mail não foi alterado — tente novamente em instantes."
+
+#: includes/class-nimbocdn-settings.php:1021
+msgid "Saved, but the billing provider could not be updated. Please try again so payment notices reach the new address."
+msgstr "Salvo, mas o provedor de cobrança não pôde ser atualizado. Tente novamente para que os avisos de pagamento cheguem ao novo endereço."
+
+#: includes/class-nimbocdn-settings.php:1022
+msgid "Account updated."
+msgstr "Conta atualizada."
+
+#: includes/class-nimbocdn-settings.php:1023
+msgid "Nothing to save — neither field changed."
+msgstr "Não há nada para salvar — nenhum dos dois campos mudou."
+
+#: includes/class-nimbocdn-settings.php:1026
+msgid "Billing email saved, but your email preference was not. Try that one again."
+msgstr "O e-mail de cobrança foi salvo, mas a sua preferência de e-mail não. Tente essa de novo."
+
+#: includes/class-nimbocdn-settings.php:1027
+msgid "Email preference saved, but the billing email was not. Try that one again."
+msgstr "A sua preferência de e-mail foi salva, mas o e-mail de cobrança não. Tente esse de novo."
+
+#: includes/class-nimbocdn-settings.php:1028
+msgid "You will get occasional emails about NimboCDN."
+msgstr "Você vai receber e-mails ocasionais sobre o NimboCDN."
+
+#: includes/class-nimbocdn-settings.php:1031
+msgid "No more product emails. Payment notices still arrive — they are part of the service."
+msgstr "Pronto, sem mais e-mails sobre o produto. Os avisos de pagamento continuam chegando — fazem parte do serviço."
+
+#: includes/class-nimbocdn-settings.php:1032
+msgid "Could not reach the service. Your email preference was not changed — try again in a moment."
+msgstr "Não foi possível falar com o serviço. Sua preferência de e-mail não mudou — tente de novo em instantes."
+
+#: includes/class-nimbocdn-settings.php:1035
+msgid "Payment received — welcome to Pro. Your whole library is being optimized from now on; the change can take a couple of minutes to reach every data center."
+msgstr "Pagamento recebido — bem-vindo ao Pro. Toda a sua biblioteca passa a ser otimizada a partir de agora; a mudança pode levar alguns minutos para chegar a todos os data centers."
+
+#: includes/class-nimbocdn-settings.php:1036
+msgid "Checkout could not be opened. Nothing was charged; your images keep working. Try again in a moment."
+msgstr "Não foi possível abrir o checkout. Nada foi cobrado; suas imagens continuam funcionando. Tente novamente em instantes."
+
+#: includes/class-nimbocdn-settings.php:1041
+msgid "Optimization paused. Your site keeps working — WordPress serves the images, exactly as it did before NimboCDN."
+msgstr "Otimização pausada. Seu site continua funcionando — o WordPress entrega as imagens, exatamente como fazia antes do NimboCDN."
+
+#: includes/class-nimbocdn-settings.php:1042
+msgid "Optimization resumed. Your images are again delivered to each visitor in the best size and format their device supports — lighter pages, faster experience."
+msgstr "Otimização retomada. Suas imagens voltam a ser entregues a cada visitante no melhor tamanho e formato que o dispositivo dele suporta — páginas mais leves, experiência mais rápida."
+
+#: includes/class-nimbocdn-settings.php:1107
+#: includes/class-nimbocdn-settings.php:1108
+msgid "Open nimbocdn.net in a new tab"
+msgstr "Abrir nimbocdn.net em uma nova aba"
+
+#: includes/class-nimbocdn-settings.php:1151
+msgid "NimboCDN never modifies your original files. Deactivate the plugin and your site returns to exactly how it was."
+msgstr "O NimboCDN nunca modifica seus arquivos originais. Desative o plugin e seu site volta exatamente como estava."
+
+#: includes/class-nimbocdn-settings.php:1201
+msgid "Your visitors"
+msgstr "Seus visitantes"
+
+#: includes/class-nimbocdn-settings.php:1216
+msgid "Resume"
+msgstr "Retomar"
+
+#: includes/class-nimbocdn-settings.php:1216
+msgid "Pause"
+msgstr "Pausar"
+
+#: includes/class-nimbocdn-settings.php:1236
+msgid "Your home page"
+msgstr "Sua página inicial"
+
+#: includes/class-nimbocdn-settings.php:1240
+msgid "— paused"
+msgstr "— em pausa"
+
+#: includes/class-nimbocdn-settings.php:1251
+msgid "Your plan"
+msgstr "Seu plano"
+
+#: includes/class-nimbocdn-settings.php:1253
+msgid "Pro plan"
+msgstr "Plano Pro"
+
+#: includes/class-nimbocdn-settings.php:1255
+msgid "Free plan"
+msgstr "Plano gratuito"
+
+#: includes/class-nimbocdn-settings.php:1266
+msgid "We could not charge your card"
+msgstr "Não conseguimos cobrar seu cartão"
+
+#. translators: %s: number of days remaining
+#: includes/class-nimbocdn-settings.php:1272
+#, php-format
+msgid "Update your payment method within %s day to keep Pro. Your images keep being delivered optimized in the meantime."
+msgid_plural "Update your payment method within %s days to keep Pro. Your images keep being delivered optimized in the meantime."
+msgstr[0] "Atualize sua forma de pagamento em %s dia para manter o Pro. Suas imagens continuam sendo entregues otimizadas enquanto isso."
+msgstr[1] "Atualize sua forma de pagamento em %s dias para manter o Pro. Suas imagens continuam sendo entregues otimizadas enquanto isso."
+
+#: includes/class-nimbocdn-settings.php:1276
+msgid "Update your payment method today to keep Pro. Your images keep being delivered optimized in the meantime."
+msgstr "Atualize sua forma de pagamento hoje para manter o Pro. Suas imagens continuam sendo entregues otimizadas enquanto isso."
+
+#: includes/class-nimbocdn-settings.php:1280
+msgid "Update payment method"
+msgstr "Atualizar forma de pagamento"
+
+#. translators: %s: percentage, for example "88%"
+#: includes/class-nimbocdn-settings.php:1314
+#, php-format
+msgid "Home page %s lighter · measured"
+msgstr "Página inicial %s mais leve · medido"
+
+#: includes/class-nimbocdn-settings.php:1317
+msgid "Measured on the first visit to your home page."
+msgstr "Medimos na primeira visita à sua página inicial."
+
+#. translators: %s: percentage, for example "91%"
+#: includes/class-nimbocdn-settings.php:1331
+#, php-format
+msgid "%s of your images are served from our cache, not from your server."
+msgstr "%s das suas imagens saem do nosso cache, não do seu servidor."
+
+#: includes/class-nimbocdn-settings.php:1334
+msgid "Each image leaves your server once; after that, our cache serves it."
+msgstr "Cada imagem sai do seu servidor uma única vez; depois, quem entrega é o nosso cache."
+
+#: includes/class-nimbocdn-settings.php:1341
+msgid "Why NimboCDN"
+msgstr "Por que o NimboCDN"
+
+#: includes/class-nimbocdn-settings.php:1344
+msgid "Every visitor gets smaller images, in the best format their browser accepts, delivered by our global network. Your WordPress stays exactly as it is."
+msgstr "Cada visitante recebe imagens menores, no melhor formato que o navegador dele aceita, entregues pela nossa rede global. Seu WordPress continua exatamente igual."
+
+#: includes/class-nimbocdn-settings.php:1349
+msgid "Faster site"
+msgstr "Site mais rápido"
+
+#: includes/class-nimbocdn-settings.php:1353
+msgid "Lighter server"
+msgstr "Servidor mais leve"
+
+#: includes/class-nimbocdn-settings.php:1404
+msgid "Pro active · your whole site optimized"
+msgstr "Pro ativo · o site inteiro otimizado"
+
+#: includes/class-nimbocdn-settings.php:1409
+msgid "Free"
+msgstr "Gratuito"
+
+#: includes/class-nimbocdn-settings.php:1409
+msgid "Your home page optimized, for good"
+msgstr "Sua página inicial otimizada, para sempre"
+
+#: includes/class-nimbocdn-settings.php:1410
+msgid "Pro"
+msgstr "Pro"
+
+#. translators: %s: number of images
+#: includes/class-nimbocdn-settings.php:1441
+#: includes/class-nimbocdn-settings.php:3227
+#, php-format
+msgid "%s image outside your home page still reaches your visitors heavy."
+msgid_plural "%s images outside your home page still reach your visitors heavy."
+msgstr[0] "%s imagem fora da página inicial ainda chega pesada aos seus visitantes."
+msgstr[1] "%s imagens fora da página inicial ainda chegam pesadas aos seus visitantes."
+
+#: includes/class-nimbocdn-settings.php:1445
+msgid "With Pro, all of them would be optimized."
+msgstr "Com o Pro, todas seriam otimizadas."
+
+#: includes/class-nimbocdn-settings.php:1451
+msgid "See Pro ↓"
+msgstr "Ver o Pro ↓"
+
+#: includes/class-nimbocdn-settings.php:1551
+msgid "Our global network"
+msgstr "Nossa rede global"
+
+#: includes/class-nimbocdn-settings.php:1554
+msgid "World map with our data centers and the one serving this computer"
+msgstr "Mapa-múndi com nossos data centers e o que atende este computador"
+
+#: includes/class-nimbocdn-settings.php:1562
+msgid "Finding where your images are delivered from…"
+msgstr "Localizando de onde vêm suas imagens…"
+
+#. translators: 1: number of cities, 2: number of countries
+#: includes/class-nimbocdn-settings.php:1568
+#, php-format
+msgid "%1$s cities in more than %2$s countries deliver your images."
+msgstr "%1$s cidades em mais de %2$s países entregam suas imagens."
+
+#: includes/class-nimbocdn-settings.php:1574
+msgid "Approximate location from the IP address of this computer. Nothing is stored: it is shown and discarded."
+msgstr "Localização aproximada pelo IP deste computador. Nada é guardado: aparece na tela e é descartado."
+
+#: includes/class-nimbocdn-settings.php:1589
+msgid "Talk to us"
+msgstr "Fale com a gente"
+
+#: includes/class-nimbocdn-settings.php:1592
+msgid "A question, a problem, an idea — write and a person answers."
+msgstr "Uma dúvida, um problema, uma ideia — escreva e uma pessoa responde."
+
+#. translators: %s: the "Settings → NimboCDN" menu path, linked to this screen
+#: includes/class-nimbocdn-settings.php:1603
+#, php-format
+msgid "This screen always lives under %s."
+msgstr "Esta tela fica sempre em %s."
+
+#: includes/class-nimbocdn-settings.php:1604
+msgid "Settings → NimboCDN"
+msgstr "Configurações → NimboCDN"
+
+#: includes/class-nimbocdn-settings.php:2135
+msgid "Optimization paused"
+msgstr "Otimização pausada"
+
+#: includes/class-nimbocdn-settings.php:2141
+msgid "Delivering optimized images"
+msgstr "Imagens otimizadas no ar"
+
+#: includes/class-nimbocdn-settings.php:2144
+msgid "New images not optimized"
+msgstr "Imagens novas sem otimização"
+
+#: includes/class-nimbocdn-settings.php:2149
+msgid "Could not measure"
+msgstr "Não foi possível medir"
+
+#: includes/class-nimbocdn-settings.php:2152
+msgid "Not measured yet"
+msgstr "Ainda não medido"
+
+#: includes/class-nimbocdn-settings.php:2207
+msgid "In the last 30 days your visitors received each image"
+msgstr "Nos últimos 30 dias, seus visitantes receberam cada imagem"
+
+#. translators: %s: amount of data, for example "1.8 GB"
+#: includes/class-nimbocdn-settings.php:2221
+#, php-format
+msgid "That is %s they did not have to download"
+msgstr "São %s que eles não precisaram baixar"
+
+#: includes/class-nimbocdn-settings.php:2228
+msgid "of images — no saving measured yet against what WordPress would have served."
+msgstr "de imagens — ainda não há economia medida em relação ao que o WordPress teria entregue."
+
+#. translators: %s: amount of data, for example "12.4 GB"
+#: includes/class-nimbocdn-settings.php:2234
+#, php-format
+msgid "Since you installed NimboCDN: %s less."
+msgstr "Desde que você instalou o NimboCDN: %s a menos."
+
+#: includes/class-nimbocdn-settings.php:2262
+msgid "Measuring your home page…"
+msgstr "Medindo sua página inicial…"
+
+#: includes/class-nimbocdn-settings.php:2291
+msgid "Each image on your home page is now"
+msgstr "Cada imagem da sua página inicial está agora"
+
+#: includes/class-nimbocdn-settings.php:2301
+msgid "As soon as the first visits arrive, this number updates with them."
+msgstr "Assim que chegarem as primeiras visitas, este número se atualiza com elas."
+
+#: includes/class-nimbocdn-settings.php:2331
+msgid "This is running in the background and can take up to a minute. This screen refreshes on its own — nothing to press."
+msgstr "Isso está rodando em segundo plano e pode levar até um minuto. Esta tela se atualiza sozinha — não precisa clicar em nada."
+
+#: includes/class-nimbocdn-settings.php:2346
+msgid "Step 1 of 4 — connecting this site to the service."
+msgstr "Etapa 1 de 4 — conectando este site ao serviço."
+
+#: includes/class-nimbocdn-settings.php:2349
+msgid "Step 1 of 4 — reading your home page and finding its images."
+msgstr "Etapa 1 de 4 — lendo sua página inicial e encontrando as imagens."
+
+#. translators: %s: number of images
+#: includes/class-nimbocdn-settings.php:2353
+#, php-format
+msgid "Step 2 of 4 — registering %s images with the service."
+msgstr "Etapa 2 de 4 — registrando %s imagens no serviço."
+
+#: includes/class-nimbocdn-settings.php:2356
+msgid "Step 2 of 4 — reading the home page again, now optimized."
+msgstr "Etapa 2 de 4 — lendo a página inicial de novo, agora otimizada."
+
+#. translators: 1: images weighed so far, 2: images to weigh
+#: includes/class-nimbocdn-settings.php:2360
+#, php-format
+msgid "Step 3 of 4 — weighing the images: %1$s of %2$s."
+msgstr "Etapa 3 de 4 — pesando as imagens: %1$s de %2$s."
+
+#. translators: 1: images weighed so far, 2: images to weigh, 3: attempt number, 4: attempts
+#: includes/class-nimbocdn-settings.php:2364
+#, php-format
+msgid "Step 3 of 4 — %1$s of %2$s weighed; waiting for the network to learn the new list (attempt %3$s of %4$s)."
+msgstr "Etapa 3 de 4 — %1$s de %2$s pesadas; esperando a rede aprender a lista nova (tentativa %3$s de %4$s)."
+
+#. translators: 1: images weighed so far, 2: images to weigh
+#: includes/class-nimbocdn-settings.php:2368
+#, php-format
+msgid "Step 3 of 4 — %1$s of %2$s weighed; one more try for the rest."
+msgstr "Etapa 3 de 4 — %1$s de %2$s pesadas; mais uma tentativa para as demais."
+
+#: includes/class-nimbocdn-settings.php:2371
+msgid "Step 4 of 4 — second pass, from the cache, to measure the response time."
+msgstr "Etapa 4 de 4 — segunda passada, do cache, para medir o tempo de resposta."
+
+#: includes/class-nimbocdn-settings.php:2374
+msgid "Starting…"
+msgstr "Começando…"
+
+#: includes/class-nimbocdn-settings.php:2431
+msgid "images delivered"
+msgstr "imagens entregues"
+
+#: includes/class-nimbocdn-settings.php:2433
+msgid "Images delivered by NimboCDN in the latest measurement of your home page. Visitor traffic takes over as it arrives."
+msgstr "Imagens entregues pelo NimboCDN na última medição da sua página inicial. O tráfego de visitantes assume conforme chega."
+
+#: includes/class-nimbocdn-settings.php:2434
+msgid "Images NimboCDN delivered to your visitors in the last 30 days."
+msgstr "Imagens que o NimboCDN entregou aos seus visitantes nos últimos 30 dias."
+
+#: includes/class-nimbocdn-settings.php:2441
+msgid "delivered by our network"
+msgstr "entregues pela nossa rede"
+
+#: includes/class-nimbocdn-settings.php:2443
+msgid "What NimboCDN delivered while weighing your home page. Visitor traffic takes over as it arrives."
+msgstr "O que o NimboCDN entregou ao pesar a sua página inicial. O tráfego de visitantes assume assim que chegar."
+
+#: includes/class-nimbocdn-settings.php:2444
+msgid "Everything NimboCDN sent to your visitors in the last 30 days. Your own server did not have to send any of it."
+msgstr "Tudo o que o NimboCDN enviou aos seus visitantes nos últimos 30 dias. O seu servidor não precisou enviar nada disso."
+
+#: includes/class-nimbocdn-settings.php:2452
+msgid "without touching your server"
+msgstr "sem tocar no seu servidor"
+
+#: includes/class-nimbocdn-settings.php:2455
+msgid "Shown once enough images have been delivered: on the first day almost everything is a first request."
+msgstr "Aparece quando houver imagens suficientes entregues: no primeiro dia quase tudo é uma primeira solicitação."
+
+#: includes/class-nimbocdn-settings.php:2474
+msgid "network response time"
+msgstr "resposta da rede"
+
+#: includes/class-nimbocdn-settings.php:2534
+msgid "Format your visitors received"
+msgstr "Formato que seus visitantes receberam"
+
+#. translators: 1: format name, 2: number of images, 3: percentage
+#: includes/class-nimbocdn-settings.php:2544
+#, php-format
+msgid "%1$s: %2$s images (%3$s)"
+msgstr "%1$s: %2$s imagens (%3$s)"
+
+#. translators: 1: date, 2: amount of data, for example "1.8 MB"
+#: includes/class-nimbocdn-settings.php:2595
+#, php-format
+msgid "%1$s: %2$s less"
+msgstr "%1$s: %2$s a menos"
+
+#. translators: %s: date
+#: includes/class-nimbocdn-settings.php:2597
+#, php-format
+msgid "%s: no saving recorded"
+msgstr "%s: nenhuma economia registrada"
+
+#: includes/class-nimbocdn-settings.php:2618
+msgid "Last 30 days — fills in with the first visits"
+msgstr "Últimos 30 dias — preenche com as primeiras visitas"
+
+#: includes/class-nimbocdn-settings.php:2622
+msgid "Data saved per day, last 30 days"
+msgstr "Dados economizados por dia, últimos 30 dias"
+
+#. translators: 1: images weighed so far, 2: images found
+#: includes/class-nimbocdn-settings.php:2646
+#, php-format
+msgid "Weighing: %1$s of %2$s images. The result appears here as soon as the first pass ends."
+msgstr "Pesando: %1$s de %2$s imagens. O resultado aparece aqui assim que a primeira passada terminar."
+
+#: includes/class-nimbocdn-settings.php:2653
+msgid "Measuring… the progress is shown above."
+msgstr "Medindo… o progresso aparece acima."
+
+#: includes/class-nimbocdn-settings.php:2669
+msgid "Without NimboCDN"
+msgstr "Sem o NimboCDN"
+
+#: includes/class-nimbocdn-settings.php:2675
+msgid "With NimboCDN"
+msgstr "Com o NimboCDN"
+
+#: includes/class-nimbocdn-settings.php:2715
+msgid "This month’s allowance is used up."
+msgstr "A franquia deste mês acabou."
+
+#: includes/class-nimbocdn-settings.php:2717
+msgid "Part of your home page is not optimized yet."
+msgstr "Parte da sua página inicial ainda não está otimizada."
+
+#. translators: %s: number of images
+#: includes/class-nimbocdn-settings.php:2725
+#, php-format
+msgid "%s image on your home page is still delivered by WordPress, as before NimboCDN."
+msgid_plural "%s images on your home page are still delivered by WordPress, as before NimboCDN."
+msgstr[0] "%s imagem da sua página inicial ainda é entregue pelo WordPress, como antes do NimboCDN."
+msgstr[1] "%s imagens da sua página inicial ainda são entregues pelo WordPress, como antes do NimboCDN."
+
+#. translators: %s: a date
+#: includes/class-nimbocdn-settings.php:2732
+#, php-format
+msgid "Nothing is wrong. Two ways out, both fine: get Pro and they are optimized today, or wait — on %s the allowance renews and NimboCDN continues on its own."
+msgstr "Não há nada de errado. Duas saídas, as duas válidas: assine o Pro e elas ficam otimizadas hoje, ou espere — em %s a franquia renova e o NimboCDN continua sozinho."
+
+#: includes/class-nimbocdn-settings.php:2736
+msgid "Nothing is wrong. Two ways out, both fine: get Pro and they are optimized today, or wait for next month, when the allowance renews and NimboCDN continues on its own."
+msgstr "Não há nada de errado. Duas saídas, as duas válidas: assine o Pro e elas ficam otimizadas hoje, ou espere o mês que vem, quando a franquia renova e o NimboCDN continua sozinho."
+
+#: includes/class-nimbocdn-settings.php:2738
+msgid "The service registers home page images when the page changes. Press Measure now; if they stay out, get in touch."
+msgstr "O serviço registra as imagens da página inicial quando a página muda. Clique em Medir agora; se continuarem de fora, fale com a gente."
+
+#: includes/class-nimbocdn-settings.php:2743
+#: includes/class-nimbocdn-settings.php:3290
+msgid "Get Pro"
+msgstr "Assinar o Pro"
+
+#. translators: %s: number of images measured
+#: includes/class-nimbocdn-settings.php:2770
+#, php-format
+msgid "The %s image on this page"
+msgid_plural "The %s images on this page"
+msgstr[0] "A %s imagem desta página"
+msgstr[1] "As %s imagens desta página"
+
+#. translators: 1: images measured, 2: images on the page
+#: includes/class-nimbocdn-settings.php:2779
+#, php-format
+msgid "%1$s of the %2$s images on this page"
+msgstr "%1$s das %2$s imagens desta página"
+
+#. translators: %s: number of images
+#: includes/class-nimbocdn-settings.php:2787
+#, php-format
+msgid "%s is delivered by WordPress: the month’s allowance of new images ran out before it."
+msgid_plural "%s are delivered by WordPress: the month’s allowance of new images ran out before them."
+msgstr[0] "%s é entregue pelo WordPress: a franquia mensal de imagens novas acabou antes de otimizá-la."
+msgstr[1] "%s são entregues pelo WordPress: a franquia mensal de imagens novas acabou antes de otimizá-las."
+
+#. translators: %s: number of images
+#: includes/class-nimbocdn-settings.php:2791
+#, php-format
+msgid "%s did not answer during the measurement and is not counted in the percentage."
+msgid_plural "%s did not answer during the measurement and are not counted in the percentage."
+msgstr[0] "%s não respondeu durante a medição e não entra na porcentagem."
+msgstr[1] "%s não responderam durante a medição e não entram na porcentagem."
+
+#. translators: 1: time since the successful measurement, 2: time since the failed attempt
+#: includes/class-nimbocdn-settings.php:2801
+#, php-format
+msgid "measured %1$s ago — the attempt %2$s ago could not reach the site"
+msgstr "medido há %1$s — a tentativa de há %2$s não conseguiu acessar o site"
+
+#: includes/class-nimbocdn-settings.php:2808
+msgid "first pass — still completing"
+msgstr "primeira passada — ainda completando"
+
+#. translators: %s: human readable time difference, for example "20 minutes"
+#: includes/class-nimbocdn-settings.php:2815
+#, php-format
+msgid "measured one by one %s ago"
+msgstr "medidas uma a uma há %s"
+
+#: includes/class-nimbocdn-settings.php:2819
+msgid "Visitor data takes up to a minute to arrive."
+msgstr "Os dados de visitantes levam até um minuto para chegar."
+
+#: includes/class-nimbocdn-settings.php:2821
+msgid "never measured"
+msgstr "nunca medido"
+
+#: includes/class-nimbocdn-settings.php:2852
+msgid "WordPress is delivering your images, exactly as before NimboCDN. Nothing broke and no file was modified."
+msgstr "O WordPress está entregando suas imagens, exatamente como antes do NimboCDN. Nada quebrou e nenhum arquivo foi modificado."
+
+#: includes/class-nimbocdn-settings.php:2855
+msgid "Your home page has no images to measure yet."
+msgstr "Sua página inicial ainda não tem imagens para medir."
+
+#: includes/class-nimbocdn-settings.php:2859
+msgid "The site credentials no longer match. Press Measure now; if it persists, get in touch."
+msgstr "As credenciais do site não conferem mais. Clique em Medir agora; se persistir, entre em contato."
+
+#: includes/class-nimbocdn-settings.php:2860
+msgid "This site is not registered with the service. Press Measure now."
+msgstr "Este site não está registrado no serviço. Clique em Medir agora."
+
+#: includes/class-nimbocdn-settings.php:2861
+msgid "Images are served from a different domain than the one registered."
+msgstr "As imagens são entregues de um domínio diferente do registrado."
+
+#: includes/class-nimbocdn-settings.php:2862
+msgid "The service has not registered your home page images yet. Press Measure now."
+msgstr "O serviço ainda não registrou as imagens da sua página inicial. Clique em Medir agora."
+
+#: includes/class-nimbocdn-settings.php:2866
+msgid "Your store keeps working and every image loads — WordPress is delivering the originals."
+msgstr "Sua loja continua funcionando e todas as imagens carregam — o WordPress está entregando os originais."
+
+#: includes/class-nimbocdn-settings.php:2874
+msgid "Your site could not reach itself to be measured, which happens on hosting with few PHP workers. Your images are not affected — only this measurement. Try again in a moment, or wait for the scheduled check."
+msgstr "Seu site não conseguiu acessar a si mesmo para ser medido, o que acontece em hospedagens com poucos workers PHP. Suas imagens não são afetadas — apenas esta medição. Tente novamente em instantes ou aguarde a verificação agendada."
+
+#. translators: 1: URL pattern of the verification file, 2: URL of the verification route
+#: includes/class-nimbocdn-settings.php:2881
+#, php-format
+msgid "This domain is already registered with the service, and to hand its credentials back the service must read a verification file from this site over the internet — which it could not. If the site runs behind a firewall or a security plugin, allow requests from the user agent NimboCDN-Verify to %1$s or to %2$s, then press Measure now. Sites behind a password or on localhost cannot be verified."
+msgstr "Este domínio já está registrado no serviço e, para devolver as credenciais, o serviço precisa ler um arquivo de verificação neste site pela internet — o que não conseguiu. Se o site está atrás de um firewall ou de um plugin de segurança, libere as requisições do user agent NimboCDN-Verify para %1$s ou para %2$s e clique em Medir agora. Sites protegidos por senha ou em localhost não podem ser verificados."
+
+#: includes/class-nimbocdn-settings.php:2887
+msgid "Too many registration attempts for this domain. Wait an hour and press Measure now."
+msgstr "Muitas tentativas de registro para este domínio. Aguarde uma hora e clique em Medir agora."
+
+#: includes/class-nimbocdn-settings.php:2889
+msgid "Not connected to the service yet. Press Measure now, or wait for the automatic check."
+msgstr "Ainda não conectado ao serviço. Clique em Medir agora ou aguarde a verificação automática."
+
+#: includes/class-nimbocdn-settings.php:2892
+msgid "The background measurement did not finish, which usually means scheduled tasks are disabled on this site. Press Measure now."
+msgstr "A medição em segundo plano não terminou, o que geralmente significa que as tarefas agendadas estão desativadas neste site. Clique em Medir agora."
+
+#: includes/class-nimbocdn-settings.php:2894
+msgid "The measurement could not be completed. Your images are not affected."
+msgstr "A medição não pôde ser concluída. Suas imagens não são afetadas."
+
+#: includes/class-nimbocdn-settings.php:2896
+msgid "Press Measure now to see what your visitors are actually receiving."
+msgstr "Clique em Medir agora para ver o que seus visitantes estão recebendo de fato."
+
+#: includes/class-nimbocdn-settings.php:2973
+msgid "Subscription cancelled."
+msgstr "Assinatura cancelada."
+
+#. translators: %s: date the paid period ends
+#: includes/class-nimbocdn-settings.php:2977
+#, php-format
+msgid "Pro stays on until %s, and then this site returns to the free plan."
+msgstr "O Pro continua até %s, e depois este site volta ao plano gratuito."
+
+#: includes/class-nimbocdn-settings.php:2985
+msgid "Whole site optimized"
+msgstr "Site inteiro otimizado"
+
+#: includes/class-nimbocdn-settings.php:2988
+#: includes/class-nimbocdn-settings.php:3201
+msgid "Format"
+msgstr "Formato"
+
+#: includes/class-nimbocdn-settings.php:2989
+#: includes/class-nimbocdn-settings.php:3202
+#: includes/class-nimbocdn-settings.php:3518
+msgid "The most modern and efficient format for images."
+msgstr "O formato mais moderno e eficiente para imagens."
+
+#: includes/class-nimbocdn-settings.php:2991
+#: includes/class-nimbocdn-settings.php:3217
+msgid "No image limit"
+msgstr "Sem limite de imagens"
+
+#. translators: %s: images optimized
+#: includes/class-nimbocdn-settings.php:2997
+#, php-format
+msgid "%s image optimized and served from our global network."
+msgid_plural "%s images optimized and served from our global network."
+msgstr[0] "%s imagem otimizada e servida pela nossa rede global."
+msgstr[1] "%s imagens otimizadas e servidas pela nossa rede global."
+
+#. translators: %s: the name of the agency or partner
+#: includes/class-nimbocdn-settings.php:3016
+#, php-format
+msgid "Pro plan provided by %s."
+msgstr "Plano Pro fornecido pela %s."
+
+#: includes/class-nimbocdn-settings.php:3020
+msgid "Pro plan provided at no cost to you."
+msgstr "Plano Pro fornecido sem custo para você."
+
+#. translators: %s: a date, for example "25 de novembro de 2026"
+#: includes/class-nimbocdn-settings.php:3026
+#, php-format
+msgid "Included until %s."
+msgstr "Incluído até %s."
+
+#. translators: %s: number of days
+#: includes/class-nimbocdn-settings.php:3044
+#, php-format
+msgid "It ends in %s day. After that this site returns to the free plan, and you can subscribe if you want to keep Pro."
+msgid_plural "It ends in %s days. After that this site returns to the free plan, and you can subscribe if you want to keep Pro."
+msgstr[0] "Termina em %s dia. Depois disso este site volta ao plano gratuito, e você pode assinar se quiser manter o Pro."
+msgstr[1] "Termina em %s dias. Depois disso este site volta ao plano gratuito, e você pode assinar se quiser manter o Pro."
+
+#: includes/class-nimbocdn-settings.php:3106
+msgid "Reactivate subscription"
+msgstr "Reativar assinatura"
+
+#: includes/class-nimbocdn-settings.php:3106
+msgid "Manage subscription"
+msgstr "Gerenciar assinatura"
+
+#: includes/class-nimbocdn-settings.php:3152
+msgid "Your home page, optimized month by month"
+msgstr "Sua página inicial, otimizada mês a mês"
+
+#: includes/class-nimbocdn-settings.php:3155
+msgid "Your home page, optimized for good"
+msgstr "Sua página inicial, otimizada para sempre"
+
+#. translators: 1: images served, 2: images on the home page
+#: includes/class-nimbocdn-settings.php:3163
+#, php-format
+msgid "%1$s of the %2$s images of your home page, in WebP, from the global cache. The rest join as the allowance renews."
+msgstr "%1$s das %2$s imagens da sua página inicial, em WebP, do cache global. As demais entram conforme a franquia renova."
+
+#. translators: %s: number of images
+#: includes/class-nimbocdn-settings.php:3170
+#, php-format
+msgid "%s image of your home page, in WebP, from the global cache."
+msgid_plural "%s images of your home page, in WebP, from the global cache."
+msgstr[0] "%s imagem da sua página inicial, em WebP, do cache global."
+msgstr[1] "%s imagens da sua página inicial, em WebP, do cache global."
+
+#. translators: 1: monthly allowance, 2: images admitted this month, 3: month name
+#: includes/class-nimbocdn-settings.php:3181
+#, php-format
+msgid "up to %1$s new images per month on the home page · %2$s used in %3$s"
+msgstr "até %1$s imagens novas por mês na página inicial · %2$s usadas em %3$s"
+
+#. translators: %s: date
+#: includes/class-nimbocdn-settings.php:3189
+#, php-format
+msgid "The monthly allowance renews on %s."
+msgstr "A franquia mensal renova em %s."
+
+#: includes/class-nimbocdn-settings.php:3197
+msgid "your whole site optimized"
+msgstr "o seu site inteiro otimizado"
+
+#: includes/class-nimbocdn-settings.php:3199
+msgid "Catalogue, products, blog and pages — not only the home page"
+msgstr "Catálogo, produtos, blog e páginas — não só a página inicial"
+
+#. translators: %s: percentage, for example "23%"
+#: includes/class-nimbocdn-settings.php:3209
+#, php-format
+msgid "%s smaller than WebP, measured on this site"
+msgstr "%s mais leve que WebP, medido neste site"
+
+#: includes/class-nimbocdn-settings.php:3213
+msgid "about 20% smaller than WebP"
+msgstr "cerca de 20% mais leve que WebP"
+
+#: includes/class-nimbocdn-settings.php:3218
+msgid "Every image delivered by our global network"
+msgstr "Todas as imagens entregues pela nossa rede global"
+
+#. translators: %s: percentage of the media library
+#: includes/class-nimbocdn-settings.php:3235
+#, php-format
+msgid "That is %s of your site. With Pro, all of them would be optimized."
+msgstr "Isso representa %s do seu site. Com o Pro, todas seriam otimizadas."
+
+#: includes/class-nimbocdn-settings.php:3322
+msgid "Your account"
+msgstr "Sua conta"
+
+#: includes/class-nimbocdn-settings.php:3326
+msgid "Domain"
+msgstr "Domínio"
+
+#: includes/class-nimbocdn-settings.php:3331
+msgid "Delivery"
+msgstr "Entrega"
+
+#. translators: 1: example hostname built from the site's domain, 2: email address
+#: includes/class-nimbocdn-settings.php:3336
+#, php-format
+msgid "Would you like a custom delivery domain for your site, such as %1$s? Get in touch: %2$s"
+msgstr "Gostaria de usar um domínio personalizado para o seu site, como %1$s? Entre em contato: %2$s"
+
+#: includes/class-nimbocdn-settings.php:3347
+#: includes/class-nimbocdn-settings.php:3353
+msgid "Billing email"
+msgstr "E-mail de cobrança"
+
+#: includes/class-nimbocdn-settings.php:3348
+msgid "Where payment notices go: a declined card, a subscription about to lapse, receipts. You can use the same address on more than one site."
+msgstr "Para onde vão os avisos de pagamento: cartão recusado, assinatura prestes a vencer, recibos. Você pode usar o mesmo endereço em mais de um site."
+
+#: includes/class-nimbocdn-settings.php:3375
+msgid "Save"
+msgstr "Salvar"
+
+#: includes/class-nimbocdn-settings.php:3420
+msgid "Product emails"
+msgstr "E-mails sobre o produto"
+
+#: includes/class-nimbocdn-settings.php:3422
+msgid "Occasional emails about NimboCDN: new features, and tips to get more out of it. Never more than a couple a month, and we never share your data with third parties. Payment notices are separate and always arrive — they are part of the service."
+msgstr "E-mails ocasionais sobre o NimboCDN: novidades e dicas para aproveitar melhor. Nunca mais que alguns por mês, e nunca compartilhamos seus dados com terceiros. Os avisos de pagamento são separados e sempre chegam — fazem parte do serviço."
+
+#: includes/class-nimbocdn-settings.php:3430
+msgid "Send me occasional emails about NimboCDN"
+msgstr "Quero receber e-mails ocasionais sobre o NimboCDN"
+
+#: includes/class-nimbocdn-settings.php:3447
+msgid "What if something goes wrong?"
+msgstr "E se algo der errado?"
+
+#: includes/class-nimbocdn-settings.php:3448
+msgid "Your original files are never altered. If an image cannot be optimized, the visitor gets the original: your site never breaks."
+msgstr "Seus arquivos originais nunca são alterados. Se uma imagem não puder ser otimizada, o visitante recebe o original: o seu site nunca quebra."
+
+#. translators: %s: percentage
+#: includes/class-nimbocdn-settings.php:3457
+#, php-format
+msgid "%s%% lighter"
+msgstr "%s%% mais leve"
+
+#: includes/class-nimbocdn-settings.php:3462
+msgid "measured"
+msgstr "medido"
+
+#: includes/class-nimbocdn-settings.php:3477
+msgid "estimated"
+msgstr "estimado"
+
+#: includes/class-nimbocdn-settings.php:3586
+msgctxt "date format shown in the panel"
+msgid "F j, Y"
+msgstr "j \\d\\e F \\d\\e Y"
+
+#: includes/class-nimbocdn-settings.php:1370
+msgid "Helps you rank on Google"
+msgstr "Ajuda a posicionar no Google"
+
+#: includes/class-nimbocdn-settings.php:1370
+msgid "Google measures how fast your page loads, and images are what slow it down most."
+msgstr "O Google mede a velocidade da sua página, e as imagens são o que mais a atrasa."
+
+#: includes/class-nimbocdn-settings.php:1384
+msgid "Google uses loading speed as one of its ranking signals. The lighter your images, the faster your page loads."
+msgstr "O Google usa a velocidade de carregamento como um dos seus sinais de posicionamento. Quanto mais leves as suas imagens, mais rápido a sua página carrega."
+
+#: includes/class-nimbocdn-settings.php:2454
+msgid "They were already on the NimboCDN network: delivered without touching your server. This number tends to rise over time: as visitors browse, images that were already optimized are served straight from our global network."
+msgstr "Já estavam na rede do NimboCDN: entregues sem tocar no seu servidor. Esse número tende a subir com o tempo: conforme os visitantes navegam, as imagens que já foram otimizadas passam a sair direto da nossa rede global."
+
+#: includes/class-nimbocdn-settings.php:2475
+msgid "Median time for our network to answer with an image it already has optimized. It does not include the trip to the visitor."
+msgstr "Tempo mediano que a nossa rede leva para responder com uma imagem que já tem otimizada. Não inclui a viagem até o visitante."
+
+#: includes/class-nimbocdn-settings.php:229
+msgid "We couldn't locate this request. The network is the same either way."
+msgstr "Não conseguimos localizar este pedido. A rede continua a mesma."
+
+#. translators: %s: formatted price, for example "R$ 499"
+#: includes/class-nimbocdn-settings.php:242
+#, php-format
+msgid "Get Pro — %s/year"
+msgstr "Assinar o Pro — %s/ano"
+
+#. translators: %s: formatted price, for example "R$ 499"
+#: includes/class-nimbocdn-settings.php:255
+#, php-format
+msgid "Switch to annual — %s/year"
+msgstr "Passar para o anual — %s/ano"
+
+#. translators: 1: amount charged today, 2: the credit already applied
+#: includes/class-nimbocdn-settings.php:257
+#, php-format
+msgid ""
+"Switch to the annual plan?\n"
+"\n"
+"You pay %1$s today, with %2$s already credited for the days you paid for and have not used. The next charge is a year from now."
+msgstr ""
+"Passar para o plano anual?\n"
+"\n"
+"Hoje você paga %1$s, com %2$s já creditados pelos dias que você pagou e não usou. A próxima cobrança é daqui a um ano."
+
+#: includes/class-nimbocdn-settings.php:258
+msgid ""
+"Switch to monthly billing?\n"
+"\n"
+"Your annual plan runs to the end of the period you already paid for, and billing becomes monthly from then on. Nothing is charged today, and there is no refund for time already paid."
+msgstr ""
+"Passar para a cobrança mensal?\n"
+"\n"
+"Seu plano anual segue até o fim do período que você já pagou, e a partir dali a cobrança passa a ser mensal. Hoje não se cobra nada, e não há reembolso do tempo já pago."
+
+#: includes/class-nimbocdn-settings.php:1037
+msgid "You are on the annual plan. The days you had already paid for were credited, and the next charge is a year from today."
+msgstr "Você está no plano anual. Os dias que você já tinha pago foram creditados, e a próxima cobrança é daqui a um ano."
+
+#: includes/class-nimbocdn-settings.php:1038
+msgid "Noted. Your annual plan runs to the end of the period you paid for, and billing becomes monthly from then on. Nothing is charged today."
+msgstr "Anotado. Seu plano anual segue até o fim do período que você pagou, e a partir dali a cobrança passa a ser mensal. Hoje não se cobra nada."
+
+#: includes/class-nimbocdn-settings.php:1039
+msgid "The plan change could not be completed. Nothing was charged and your plan is unchanged; try again in a moment."
+msgstr "Não deu para concluir a troca de plano. Nada foi cobrado e seu plano segue igual; tente de novo em instantes."
+
+#. translators: %s: date of the next renewal
+#: includes/class-nimbocdn-settings.php:3068
+#, php-format
+msgid "Annual plan · renews on %s"
+msgstr "Plano anual · renova em %s"
+
+#. translators: %s: date of the next renewal
+#: includes/class-nimbocdn-settings.php:3070
+#, php-format
+msgid "Monthly plan · renews on %s"
+msgstr "Plano mensal · renova em %s"
+
+#: includes/class-nimbocdn-settings.php:3074
+msgid "Annual plan"
+msgstr "Plano anual"
+
+#: includes/class-nimbocdn-settings.php:3074
+msgid "Monthly plan"
+msgstr "Plano mensal"
+
+#. translators: %s: date the current period ends
+#: includes/class-nimbocdn-settings.php:3089
+#, php-format
+msgid "Switching to monthly on %s. Nothing is charged until then, and you keep everything you paid for."
+msgstr "Passa para mensal em %s. Até lá não se cobra nada, e você mantém tudo o que pagou."
+
+#: includes/class-nimbocdn-settings.php:3117
+msgid "Switch to annual"
+msgstr "Passar para o anual"
+
+#: includes/class-nimbocdn-settings.php:3125
+msgid "Switch to monthly at renewal"
+msgstr "Passar para mensal na renovação"
+
+#: includes/class-nimbocdn-settings.php:3272
+msgid "Monthly"
+msgstr "Mensal"
+
+#: includes/class-nimbocdn-settings.php:3275
+msgid "Annual"
+msgstr "Anual"
+
+#: includes/class-nimbocdn-settings.php:3276
+msgid "2 months free"
+msgstr "2 meses grátis"
+
+#. translators: %s: formatted price, for example "R$ 49,90"
+#: includes/class-nimbocdn-settings.php:247
+#, php-format
+msgid "%s/month"
+msgstr "%s/mês"
+
+#. translators: %s: formatted price, for example "R$ 499"
+#: includes/class-nimbocdn-settings.php:249
+#, php-format
+msgid "%s/year"
+msgstr "%s/ano"
+
+#. translators: %s: monthly price
+#: includes/class-nimbocdn-settings.php:253
+#, php-format
+msgid "%s charged every month. Cancel whenever you want."
+msgstr "%s por mês. Você cancela quando quiser."
+
+#: includes/class-nimbocdn-settings.php:3263
+msgid "Choose how you pay"
+msgstr "Escolha como pagar"
+
+#. translators: %s: the AVIF tag
+#: includes/class-nimbocdn-settings.php:1414
+#, php-format
+msgid "Your whole site, in %s"
+msgstr "O site inteiro, em %s"
+
+#. translators: 1: annual price, 2: what that works out to per month, 3: total saved
+#: includes/class-nimbocdn-settings.php:251
+#, php-format
+msgid "%1$s billed once a year — that is %2$s a month, and you save %3$s."
+msgstr "%1$s uma vez por ano — dá %2$s por mês, e você economiza %3$s."
+
+#: includes/class-nimbocdn-settings.php:1040
+msgid "This site has not proved it controls its domain yet, so billing stays closed. Press Measure now above; it usually takes a few seconds."
+msgstr "Este site ainda não provou que controla o próprio domínio, então a cobrança continua fechada. Clique em Medir agora acima; costuma levar alguns segundos."

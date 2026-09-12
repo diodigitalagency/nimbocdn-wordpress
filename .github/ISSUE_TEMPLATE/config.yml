@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/diodigitalagency/nimbocdn-wordpress/security/advisories/new
+    about: Report privately. Please do not open a public issue.
+  - name: Account or billing question
+    url: mailto:hello@nimbocdn.net
+    about: Anything about your site's account, plan or invoices.
+  - name: Documentation and FAQ
+    url: https://nimbocdn.net/install
+    about: How to install, what the free plan includes, what Pro adds.

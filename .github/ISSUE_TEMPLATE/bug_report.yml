@@ -1,0 +1,35 @@
+name: Bug report
+description: Something the plugin does wrong on your site
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Plugin version
+      description: Shown on the plugins list. The Support link there pre-fills it.
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: WordPress / PHP / WooCommerce
+      placeholder: "WordPress 7.1, PHP 8.3, WooCommerce 9.x (or none)"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: What you expected, what you saw, and on which page.
+    validations:
+      required: true
+  - type: textarea
+    id: urls
+    attributes:
+      label: One image URL, before and after
+      description: The original `src` WordPress prints, and the rewritten one (starts with the delivery hostname). Paste both if you can.
+  - type: textarea
+    id: other
+    attributes:
+      label: Other plugins that touch images or HTML
+      description: Caching, optimization, lazy-load or page-builder plugins that are active.

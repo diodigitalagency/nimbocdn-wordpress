@@ -1,0 +1,10 @@
+# Files in this repository that are not part of the plugin package.
+.git
+.github
+.distignore
+.gitattributes
+CHANGELOG.md
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+README.md
+SECURITY.md
