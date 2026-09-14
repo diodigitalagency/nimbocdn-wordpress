@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.5.6
+Stable tag: 0.5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Images are the heaviest part of almost every page, and usually the element that 
 
 1. **Install and activate.** The plugin registers your site with the service and measures your home page in the background. Nothing to configure.
 2. **The plugin rewrites image URLs** in your HTML — `src`, `srcset`, `<picture>` sources, gallery zoom and lightbox links, CSS background images — so they point at our network instead of your server.
-3. **The edge does the heavy lifting.** The first time a real visitor asks for an image, the network fetches your original once, resizes it, encodes it as AVIF, WebP, JPEG or PNG depending on the browser, and keeps the result in a permanent cache. From then on your server never sees that request again.
+3. **The edge does the heavy lifting.** The first time a real visitor asks for an image, the network fetches your original once, resizes it, encodes it as AVIF or WebP depending on the browser, and keeps the result in a permanent cache. From then on your server never sees that request again. A client that accepts neither format gets your original file, exactly as without the plugin.
 
 Your files are never modified, moved, re-compressed or deleted. Deactivate the plugin and your site serves its own images again, immediately.
 
@@ -58,7 +58,7 @@ Pro is a paid plan of the hosted service. All of the plugin's code is here and f
 
 = Formats, chosen by measurement =
 
-Images are delivered as AVIF, WebP or JPEG depending on what the visitor's browser accepts, and as PNG instead of JPEG when the original has transparency. That order was chosen by measuring, not by convention. Across 14 product images from two real stores, compared at the same quality level, AVIF needed **32.1% fewer bytes than JPEG** — winning in 14 of 14 — and WebP **21.8% fewer**, winning in 11 of 14.
+Images are delivered as AVIF or WebP depending on what the visitor's browser accepts. A client that accepts neither — measured in September 2026, almost always a crawler — receives a JPEG or PNG copy if one was already made, and your original file otherwise; no new copy is made for it. That order was chosen by measuring, not by convention. Across 14 product images from two real stores, compared at the same quality level, AVIF needed **32.1% fewer bytes than JPEG** — winning in 14 of 14 — and WebP **21.8% fewer**, winning in 11 of 14.
 
 We can tell you how much lighter your images travel; the settings screen shows it measured on your own home page and on your real traffic. We will not promise you a faster page or a better position on Google, because those depend on your hosting, your theme and everything else on the page.
 
@@ -161,7 +161,7 @@ No, and there is nothing to sit through. Each image is prepared the first time a
 
 = How do I fix "serve images in next-gen formats" in PageSpeed Insights? =
 
-That warning means your images are being sent as JPEG or PNG to browsers that accept better formats. NimboCDN answers each request with AVIF or WebP when the browser's `Accept` header says it supports them, and falls back to JPEG or PNG when it does not.
+That warning means your images are being sent as JPEG or PNG to browsers that accept better formats. NimboCDN answers each request with AVIF or WebP when the browser's `Accept` header says it supports them, and with your original file when it does not.
 
 = How do I fix "properly size images"? =
 
@@ -173,7 +173,7 @@ Images are usually the heaviest part of a page and usually what decides the Larg
 
 = Does it work with JPEG and PNG, and with transparency? =
 
-Yes. JPEG and PNG originals are both delivered optimized. When the original has transparency the ladder is AVIF, then WebP, then PNG, so transparency is never lost.
+Yes. JPEG and PNG originals are both delivered optimized, as AVIF or WebP. Both formats keep transparency, so it is never lost; a client that accepts neither receives your original file, transparency included.
 
 = I already use an image compression plugin. Do I need to remove it? =
 
@@ -229,6 +229,10 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 6. The heavy lifting moves to our side: your server is asked once per image and never again.
 
 == Changelog ==
+
+= 0.5.7 =
+* Crawlers no longer cost a new image copy. A client that accepts neither AVIF nor WebP now receives your original file, or a JPEG or PNG copy made earlier, instead of triggering a new JPEG. Measured on two stores from 10 to 14 September 2026: 71% of new copies were being made only for crawlers such as Amazonbot, AhrefsBot, bingbot and Googlebot-Image. Visitors whose browser accepts AVIF or WebP see no change.
+* The plugin's author link now points to its author's page. No change to how images are rewritten.
 
 = 0.5.6 =
 * Release prepared for the WordPress.org plugin directory. The distributed package now carries no code comments at all, and every note WordPress requires — translator hints and licence attributions — is in English.
@@ -288,6 +292,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 0.5.7 =
+Documents a delivery change on our network: clients that accept neither AVIF nor WebP, almost always crawlers, now get your original file. Nothing changes in how the plugin rewrites your images. Update at any time.
 
 = 0.5.6 =
 Safer billing redirects, a cleaner package prepared for the WordPress.org directory, and no change to how your images are delivered. Update at any time.

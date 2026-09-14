@@ -2,7 +2,7 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: NimboCDN 0.5.6\n"
+"Project-Id-Version: NimboCDN 0.5.7\n"
 "Report-Msgid-Bugs-To: https://nimbocdn.net\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

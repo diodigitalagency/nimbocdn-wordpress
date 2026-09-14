@@ -3,6 +3,10 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 0.5.7
+* Crawlers no longer cost a new image copy. A client that accepts neither AVIF nor WebP now receives your original file, or a JPEG or PNG copy made earlier, instead of triggering a new JPEG. Measured on two stores from 10 to 14 September 2026: 71% of new copies were being made only for crawlers such as Amazonbot, AhrefsBot, bingbot and Googlebot-Image. Visitors whose browser accepts AVIF or WebP see no change.
+* The plugin's author link now points to its author's page. No change to how images are rewritten.
+
 ## 0.5.6
 * Release prepared for the WordPress.org plugin directory. The distributed package now carries no code comments at all, and every note WordPress requires — translator hints and licence attributions — is in English.
 * Checkout, invoice and billing-portal redirects now go through `wp_safe_redirect()` with an explicit allow-list of destinations (our own service and the payment provider's hosted pages). A URL that does not qualify sends you back to the settings screen with a notice instead of anywhere else.
