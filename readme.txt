@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.5.7
+Stable tag: 0.5.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,7 +213,7 @@ Every number names what it was measured on. "Your visitors downloaded X less" is
 
 = Which languages does it come in? =
 
-English, with complete Brazilian Portuguese and Spanish translations bundled. Other languages fall back to English.
+English. Translations are delivered by WordPress itself as language packs from translate.wordpress.org, where our Brazilian Portuguese and Spanish translations are published. Languages without a translation fall back to English.
 
 = Where do I get support? =
 
@@ -229,6 +229,12 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 6. The heavy lifting moves to our side: your server is asked once per image and never again.
 
 == Changelog ==
+
+= 0.5.8 =
+* The settings screen loads its stylesheet through the WordPress style queue instead of printing a `<style>` tag in the page.
+* On WordPress 6.9 and later, image rewriting uses the template output buffer that WordPress itself opens and closes; the plugin no longer opens a buffer of its own. On earlier versions the buffer is closed explicitly at the end of the request.
+* Translations are no longer bundled in the package; WordPress delivers them as language packs from translate.wordpress.org.
+* Nothing assumes `/wp-content/uploads` any more: the verification file falls back to `content_url()`, and CSS background images are matched against the uploads path WordPress reports, so sites with a relocated content directory are covered.
 
 = 0.5.7 =
 * Crawlers no longer cost a new image copy. A client that accepts neither AVIF nor WebP now receives your original file, or a JPEG or PNG copy made earlier, instead of triggering a new JPEG. Measured on two stores from 10 to 14 September 2026: 71% of new copies were being made only for crawlers such as Amazonbot, AhrefsBot, bingbot and Googlebot-Image. Visitors whose browser accepts AVIF or WebP see no change.

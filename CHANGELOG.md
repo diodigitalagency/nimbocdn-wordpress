@@ -3,6 +3,12 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 0.5.8
+* The settings screen loads its stylesheet through the WordPress style queue instead of printing a `<style>` tag in the page.
+* On WordPress 6.9 and later, image rewriting uses the template output buffer that WordPress itself opens and closes; the plugin no longer opens a buffer of its own. On earlier versions the buffer is closed explicitly at the end of the request.
+* Translations are no longer bundled in the package; WordPress delivers them as language packs from translate.wordpress.org.
+* Nothing assumes `/wp-content/uploads` any more: the verification file falls back to `content_url()`, and CSS background images are matched against the uploads path WordPress reports, so sites with a relocated content directory are covered.
+
 ## 0.5.7
 * Crawlers no longer cost a new image copy. A client that accepts neither AVIF nor WebP now receives your original file, or a JPEG or PNG copy made earlier, instead of triggering a new JPEG. Measured on two stores from 10 to 14 September 2026: 71% of new copies were being made only for crawlers such as Amazonbot, AhrefsBot, bingbot and Googlebot-Image. Visitors whose browser accepts AVIF or WebP see no change.
 * The plugin's author link now points to its author's page. No change to how images are rewritten.

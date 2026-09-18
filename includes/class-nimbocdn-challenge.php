@@ -39,14 +39,14 @@ class Challenge {
 			return '';
 		}
 		$dir  = wp_upload_dir();
-		$base = isset( $dir['baseurl'] ) && is_string( $dir['baseurl'] ) ? $dir['baseurl'] : home_url( '/wp-content/uploads' );
+		$base = isset( $dir['baseurl'] ) && is_string( $dir['baseurl'] ) ? $dir['baseurl'] : content_url( 'uploads' );
 		$path = wp_parse_url( trailingslashit( $base ) . self::FILE_PREFIX . $id . '.txt', PHP_URL_PATH );
 		return is_string( $path ) ? $path : '';
 	}
 
 	public static function file_url_pattern() {
 		$dir  = wp_upload_dir();
-		$base = isset( $dir['baseurl'] ) && is_string( $dir['baseurl'] ) ? $dir['baseurl'] : home_url( '/wp-content/uploads' );
+		$base = isset( $dir['baseurl'] ) && is_string( $dir['baseurl'] ) ? $dir['baseurl'] : content_url( 'uploads' );
 		return $base . '/' . self::FILE_PREFIX . '*.txt';
 	}
 

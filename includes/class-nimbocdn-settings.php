@@ -163,6 +163,9 @@ class Settings {
 			'before'
 		);
 		wp_add_inline_script( 'nimbocdn-panel', self::script() );
+		wp_register_style( 'nimbocdn-panel', false, array(), VERSION );
+		wp_enqueue_style( 'nimbocdn-panel' );
+		wp_add_inline_style( 'nimbocdn-panel', self::styles() );
 	}
 
 	public static function preconnect() {
@@ -630,7 +633,6 @@ class Settings {
 			Health::refresh_account();
 		}
 
-		self::styles();
 		?>
 		<div class="wrap nimbocdn">
 						<div class="nimbo-brand">
@@ -2381,8 +2383,7 @@ JS;
 	}
 
 	private static function styles() {
-		?>
-		<style>
+		return <<<'CSS'
 		.nimbocdn {
 			--nb-line:#c3c4c7; --nb-rule:#e4e5e7; --nb-ink:#1d2327; --nb-muted:#646970;
 			--nb-blue:var(--wp-admin-theme-color, #2271b1);
@@ -2810,7 +2811,6 @@ JS;
 			.nimbo-size b.nimbo-cut { margin-left:.35rem; }
 		}
 		.nimbocdn .regular-text { max-width:100%; }
-		</style>
-		<?php
+CSS;
 	}
 }

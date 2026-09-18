@@ -103,7 +103,23 @@ class Rewriter {
 		if ( ! self::should_rewrite() ) {
 			return;
 		}
-		ob_start( array( __CLASS__, 'filter_output' ) );
+		if ( function_exists( 'wp_start_template_enhancement_output_buffer' ) ) {
+			add_filter( 'wp_template_enhancement_output_buffer', array( __CLASS__, 'filter_output' ) );
+			return;
+		}
+		if ( ob_start( array( __CLASS__, 'filter_output' ) ) ) {
+			self::$buffer_level = ob_get_level();
+			add_action( 'shutdown', array( __CLASS__, 'end_buffer' ), 0 );
+		}
+	}
+
+	private static $buffer_level = 0;
+
+	public static function end_buffer() {
+		while ( self::$buffer_level > 0 && ob_get_level() >= self::$buffer_level ) {
+			ob_end_flush();
+		}
+		self::$buffer_level = 0;
 	}
 
 	public static function filter_output( $html ) {
@@ -162,8 +178,13 @@ class Rewriter {
 			return $filtered;
 		}
 
+		$uploads = wp_upload_dir();
+		$path    = empty( $uploads['baseurl'] ) ? '' : wp_parse_url( $uploads['baseurl'], PHP_URL_PATH );
+		if ( ! is_string( $path ) || '' === trim( $path, '/' ) ) {
+			return $anchors;
+		}
 		$backgrounds = preg_replace_callback(
-			'/url\((["\']?)(https?:\/\/[^"\')\s]+?\/wp-content\/uploads\/[^"\')\s]+?\.(?:jpe?g|png|gif|webp)(?:\?[^"\')\s]*)?)\1\)/i',
+			'/url\((["\']?)(https?:\/\/[^"\')\s]+?' . preg_quote( '/' . trim( $path, '/' ) . '/', '/' ) . '[^"\')\s]+?\.(?:jpe?g|png|gif|webp)(?:\?[^"\')\s]*)?)\1\)/i',
 			array( __CLASS__, 'rewrite_css_url' ),
 			$anchors
 		);
