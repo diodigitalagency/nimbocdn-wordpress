@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.5.9
+Stable tag: 0.5.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -230,6 +230,10 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 
 == Changelog ==
 
+= 0.5.10 =
+* When your domain is verified, the plugin empties your page cache so cached pages come back with the new image addresses. Measured on a store running WP Rocket on 19 September 2026: after verification, 3,393 cached pages kept the old addresses and loaded the original images. Supported: WP Rocket, LiteSpeed Cache, W3 Total Cache, WP Super Cache, WP Fastest Cache, SiteGround Speed Optimizer, Cache Enabler, Hummingbird, WP-Optimize, Comet Cache, Swift Performance, Proxy Cache Purge, Cloudflare, and the Kinsta, WP Engine, Pantheon, GoDaddy and Pressable host caches.
+* Our network also keeps accepting the previous addresses for 30 days, so any cache the plugin cannot reach keeps serving optimized images.
+
 = 0.5.9 =
 * Works behind a hosting antibots (SiteGround and similar) with nothing for you to do. Measured on a SiteGround store on 19 September 2026: the domain could not be verified, so upgrading and billing were locked, and the free plan admitted 0 of the 72 images on the home page. With this version the domain was verified in 3 seconds and the home page images were admitted, without touching the firewall.
 * Domain verification writes a blank PNG image next to the verification file and removes both when it finishes. The service reads its size through Cloudflare Images, which the antibots let through.
@@ -304,6 +308,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 0.5.10 =
+After your domain is verified, cached pages are refreshed so every image keeps being optimized. Update at any time.
 
 = 0.5.9 =
 Sites behind a hosting antibots (SiteGround and similar) now verify their domain and sync their home page with nothing to configure. Update at any time.

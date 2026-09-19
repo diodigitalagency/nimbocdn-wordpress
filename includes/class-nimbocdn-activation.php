@@ -152,7 +152,9 @@ class Activation {
 	}
 
 	private static function adopt( $data ) {
-		$patch = array();
+		$was_verified = self::is_verified();
+		$old_key      = Settings_Store::credentials()['license_key'];
+		$patch        = array();
 		foreach ( array( 'tenant_id', 'license_key', 'domain' ) as $key ) {
 			if ( ! empty( $data[ $key ] ) && is_string( $data[ $key ] ) ) {
 				$patch[ $key ] = sanitize_text_field( $data[ $key ] );
@@ -168,6 +170,10 @@ class Activation {
 			update_option( 'nimbocdn_email', $email, false );
 		}
 		update_option( 'nimbocdn_activation_error', '', false );
+		$new_key = isset( $patch['license_key'] ) ? $patch['license_key'] : $old_key;
+		if ( ( ! $was_verified && ! empty( $data['verified'] ) ) || ( '' !== $old_key && $new_key !== $old_key ) ) {
+			Page_Cache::purge();
+		}
 	}
 
 	private static function error_code( $response ) {

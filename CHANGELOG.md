@@ -3,6 +3,10 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 0.5.10
+* When your domain is verified, the plugin empties your page cache so cached pages come back with the new image addresses. Measured on a store running WP Rocket on 19 September 2026: after verification, 3,393 cached pages kept the old addresses and loaded the original images. Supported: WP Rocket, LiteSpeed Cache, W3 Total Cache, WP Super Cache, WP Fastest Cache, SiteGround Speed Optimizer, Cache Enabler, Hummingbird, WP-Optimize, Comet Cache, Swift Performance, Proxy Cache Purge, Cloudflare, and the Kinsta, WP Engine, Pantheon, GoDaddy and Pressable host caches.
+* Our network also keeps accepting the previous addresses for 30 days, so any cache the plugin cannot reach keeps serving optimized images.
+
 ## 0.5.9
 * Works behind a hosting antibots (SiteGround and similar) with nothing for you to do. Measured on a SiteGround store on 19 September 2026: the domain could not be verified, so upgrading and billing were locked, and the free plan admitted 0 of the 72 images on the home page. With this version the domain was verified in 3 seconds and the home page images were admitted, without touching the firewall.
 * Domain verification writes a blank PNG image next to the verification file and removes both when it finishes. The service reads its size through Cloudflare Images, which the antibots let through.
