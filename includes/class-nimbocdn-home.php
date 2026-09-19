@@ -12,6 +12,8 @@ class Home {
 
 	const MAX_ORIGINS = 500;
 
+	const MAX_PAGE_BYTES = 1000000;
+
 	public static function init() {
 		add_action( self::HOOK, array( __CLASS__, 'run' ) );
 		add_action( 'save_post', array( __CLASS__, 'on_post' ), 10, 3 );
@@ -69,7 +71,8 @@ class Home {
 		if ( is_wp_error( $page ) ) {
 			return;
 		}
-		self::sync( self::discover( (string) wp_remote_retrieve_body( $page ) ) );
+		$html = (string) wp_remote_retrieve_body( $page );
+		self::sync( self::discover( $html ), false, $html );
 	}
 
 	public static function discover( $html ) {
@@ -177,15 +180,16 @@ class Home {
 		return $out;
 	}
 
-	public static function sync( array $origins, $force = false ) {
-		$before   = Settings_Store::edge()['served'];
-		$response = Api::post(
-			'/site/home',
-			array(
-				'origins' => array_values( $origins ),
-				'force'   => (bool) $force,
-			)
+	public static function sync( array $origins, $force = false, $html = '' ) {
+		$before = Settings_Store::edge()['served'];
+		$body   = array(
+			'origins' => array_values( $origins ),
+			'force'   => (bool) $force,
 		);
+		if ( is_string( $html ) && '' !== $html ) {
+			$body['page'] = substr( $html, 0, self::MAX_PAGE_BYTES );
+		}
+		$response = Api::post( '/site/home', $body );
 		if ( ! $response['ok'] ) {
 			return false;
 		}
@@ -222,6 +226,8 @@ class Home {
 			'month'     => isset( $cap['month'] ) && is_string( $cap['month'] ) ? sanitize_text_field( $cap['month'] ) : '',
 			'renews_at' => isset( $cap['renews_at'] ) && is_string( $cap['renews_at'] ) ? sanitize_text_field( $cap['renews_at'] ) : '',
 			'synced_at' => isset( $state['synced_at'] ) && is_string( $state['synced_at'] ) ? sanitize_text_field( $state['synced_at'] ) : '',
+			'source'    => isset( $state['source'] ) && is_string( $state['source'] ) ? sanitize_key( $state['source'] ) : '',
+			'blocked'   => isset( $state['blocked'] ) && is_string( $state['blocked'] ) ? sanitize_key( $state['blocked'] ) : '',
 		);
 		update_option( 'nimbocdn_account', $account, false );
 	}

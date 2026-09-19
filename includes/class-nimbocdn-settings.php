@@ -565,15 +565,9 @@ class Settings {
 			return;
 		}
 		printf(
-			'<div class="notice notice-warning"><p><strong>%s</strong> %s</p><p>%s</p></div>',
+			'<div class="notice notice-warning"><p><strong>%s</strong> %s</p></div>',
 			esc_html__( 'Domain not verified yet.', 'nimbocdn' ),
-			esc_html__( 'Your images are being optimized on the free plan all the same. Upgrading to Pro and managing billing stay locked until the service can confirm this site is yours: it tries to read a small verification file from this site over the internet, and so far it could not.', 'nimbocdn' ),
-			sprintf(
-				/* translators: 1: URL pattern of the verification file, 2: URL of the verification route */
-				esc_html__( 'If this site runs behind a firewall or a security plugin, allow requests from the user agent NimboCDN-Verify to %1$s (or to %2$s), then press Measure now. It is retried automatically twice a day.', 'nimbocdn' ),
-				'<code>' . esc_html( Challenge::file_url_pattern() ) . '</code>',
-				'<code>' . esc_html( home_url( '/?rest_route=/nimbocdn/v1/challenge' ) ) . '</code>'
-			)
+			esc_html__( 'Your images are being optimized on the free plan all the same. Upgrading to Pro and managing billing stay locked until the service confirms this site is yours. It checks by itself, with nothing for you to do, and retries automatically twice a day.', 'nimbocdn' )
 		);
 	}
 
@@ -1879,12 +1873,7 @@ JS;
 			if ( 'not-configured' === $probe['detail'] ) {
 				$why = (string) get_option( 'nimbocdn_activation_error', '' );
 				if ( 'not-verified' === $why ) {
-					return sprintf(
-						/* translators: 1: URL pattern of the verification file, 2: URL of the verification route */
-						__( 'This domain is already registered with the service, and to hand its credentials back the service must read a verification file from this site over the internet — which it could not. If the site runs behind a firewall or a security plugin, allow requests from the user agent NimboCDN-Verify to %1$s or to %2$s, then press Measure now. Sites behind a password or on localhost cannot be verified.', 'nimbocdn' ),
-						Challenge::file_url_pattern(),
-						home_url( '/?rest_route=/nimbocdn/v1/challenge' )
-					);
+					return __( 'This domain is already registered with the service, and to hand its credentials back the service must confirm this site is yours, which it could not do yet. It retries by itself; press Measure now to try again. Sites behind a password or on localhost cannot be verified.', 'nimbocdn' );
 				}
 				if ( 'rate-limited' === $why ) {
 					return __( 'Too many registration attempts for this domain. Wait an hour and press Measure now.', 'nimbocdn' );

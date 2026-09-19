@@ -6,6 +6,8 @@ defined( 'ABSPATH' ) || exit;
 
 class Activation {
 
+	const FINISH_TIMEOUT = 30;
+
 	public static function activate( $network_wide = false ) {
 		if ( ! wp_next_scheduled( Settings_Store::CRON_HOOK ) ) {
 			wp_schedule_event( time() + MINUTE_IN_SECONDS, 'twicedaily', Settings_Store::CRON_HOOK );
@@ -142,7 +144,8 @@ class Activation {
 				'marketing_notice'  => $marketing['notice'],
 				'marketing_opt_out' => $marketing['opt_out'],
 			),
-			false
+			false,
+			self::FINISH_TIMEOUT
 		);
 		Challenge::forget();
 		return $response;

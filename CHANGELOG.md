@@ -3,6 +3,12 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 0.5.9
+* Works behind a hosting antibots (SiteGround and similar) with nothing for you to do. Measured on a SiteGround store on 19 September 2026: the domain could not be verified, so upgrading and billing were locked, and the free plan admitted 0 of the 72 images on the home page. With this version the domain was verified in 3 seconds and the home page images were admitted, without touching the firewall.
+* Domain verification writes a blank PNG image next to the verification file and removes both when it finishes. The service reads its size through Cloudflare Images, which the antibots let through.
+* Home page sync sends the HTML of your home page, read by your own server, so the service can check the images even when its own visit is blocked.
+* The settings screen no longer asks you to allow a user agent in your firewall.
+
 ## 0.5.8
 * The settings screen loads its stylesheet through the WordPress style queue instead of printing a `<style>` tag in the page.
 * On WordPress 6.9 and later, image rewriting uses the template output buffer that WordPress itself opens and closes; the plugin no longer opens a buffer of its own. On earlier versions the buffer is closed explicitly at the end of the request.

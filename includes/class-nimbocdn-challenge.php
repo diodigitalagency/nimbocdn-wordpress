@@ -44,12 +44,6 @@ class Challenge {
 		return is_string( $path ) ? $path : '';
 	}
 
-	public static function file_url_pattern() {
-		$dir  = wp_upload_dir();
-		$base = isset( $dir['baseurl'] ) && is_string( $dir['baseurl'] ) ? $dir['baseurl'] : content_url( 'uploads' );
-		return $base . '/' . self::FILE_PREFIX . '*.txt';
-	}
-
 	private static function write_file( $challenge ) {
 		self::remove_file();
 		$dir = self::uploads_dir();
@@ -65,6 +59,8 @@ class Challenge {
 		if ( ! $fs->put_contents( $path, $challenge . "\n", 0644 ) ) {
 			return;
 		}
+		list( $width, $height ) = self::image_size( $challenge );
+		$fs->put_contents( trailingslashit( $dir ) . self::FILE_PREFIX . $id . '.png', self::png( $width, $height ), 0644 );
 		set_transient( self::FILE_TRANSIENT, $id, self::TTL );
 		wp_clear_scheduled_hook( self::SWEEP_HOOK );
 		wp_schedule_single_event( time() + self::TTL, self::SWEEP_HOOK );
@@ -79,6 +75,7 @@ class Challenge {
 		$dir = self::uploads_dir();
 		$fs  = '' === $dir ? null : self::filesystem();
 		if ( null !== $fs && $fs->delete( trailingslashit( $dir ) . self::FILE_PREFIX . $id . '.txt' ) ) {
+			$fs->delete( trailingslashit( $dir ) . self::FILE_PREFIX . $id . '.png' );
 			wp_clear_scheduled_hook( self::SWEEP_HOOK );
 		}
 	}
@@ -95,10 +92,50 @@ class Challenge {
 			return;
 		}
 		foreach ( array_keys( $list ) as $name ) {
-			if ( preg_match( '/^' . preg_quote( self::FILE_PREFIX, '/' ) . '[a-f0-9]{12}\.txt$/', (string) $name ) ) {
+			if ( preg_match( '/^' . preg_quote( self::FILE_PREFIX, '/' ) . '[a-f0-9]{12}\.(txt|png)$/', (string) $name ) ) {
 				$fs->delete( trailingslashit( $dir ) . $name );
 			}
 		}
+	}
+
+	public static function image_size( $challenge ) {
+		$hash = hash( 'sha256', (string) $challenge );
+		return array( 1 + hexdec( substr( $hash, 0, 3 ) ) % 1024, 1 + hexdec( substr( $hash, 3, 3 ) ) % 1024 );
+	}
+
+	public static function png( $width, $height ) {
+		$raw = str_repeat( "\0" . str_repeat( "\0", (int) ceil( $width / 8 ) ), $height );
+		if ( function_exists( 'gzcompress' ) ) {
+			$zlib = gzcompress( $raw, 9 );
+		} else {
+			$zlib = "\x78\x01";
+			$len  = strlen( $raw );
+			for ( $at = 0; $at < $len; $at += 65535 ) {
+				$block = substr( $raw, $at, 65535 );
+				$size  = strlen( $block );
+				$zlib .= chr( $at + 65535 >= $len ? 1 : 0 ) . pack( 'v', $size ) . pack( 'v', $size ^ 0xffff ) . $block;
+			}
+			$zlib .= pack( 'N', self::adler32( $raw ) );
+		}
+		return "\x89PNG\r\n\x1a\n"
+			. self::png_chunk( 'IHDR', pack( 'NNCCCCC', $width, $height, 1, 0, 0, 0, 0 ) )
+			. self::png_chunk( 'IDAT', $zlib )
+			. self::png_chunk( 'IEND', '' );
+	}
+
+	private static function png_chunk( $type, $data ) {
+		return pack( 'N', strlen( $data ) ) . $type . $data . pack( 'N', crc32( $type . $data ) );
+	}
+
+	private static function adler32( $data ) {
+		$a   = 1;
+		$b   = 0;
+		$len = strlen( $data );
+		for ( $i = 0; $i < $len; $i++ ) {
+			$a = ( $a + ord( $data[ $i ] ) ) % 65521;
+			$b = ( $b + $a ) % 65521;
+		}
+		return ( $b << 16 ) | $a;
 	}
 
 	private static function uploads_dir() {

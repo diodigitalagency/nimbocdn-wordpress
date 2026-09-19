@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.5.8
+Stable tag: 0.5.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,9 +93,9 @@ This plugin is a connector for **NimboCDN**, a hosted image delivery service ope
 * Terms of Service: https://nimbocdn.net/terms
 * Privacy Policy: https://nimbocdn.net/privacy
 
-**Registration — on activation, once.** The plugin sends your site's domain to `https://nimbocdn-prd-control.nimbocdn.workers.dev/activate/start`, which answers with a random challenge. The plugin exposes that challenge for five minutes at `/wp-json/nimbocdn/v1/challenge`, at `/?nimbocdn-challenge=1`, and as a small text file `wp-content/uploads/nimbocdn-challenge-<random>.txt` (removed as soon as registration finishes). It then sends the domain, site name, WordPress version, plugin version, site language and the administrator email address to `/activate/finish`. The service reads the challenge from your site — proof that whoever registers the domain controls it. A domain nobody registered before is registered even when the proof fails, so a firewall never leaves the plugin idle; until the proof succeeds the site stays on the free plan and cannot manage billing. Re-activating the same domain returns the same credentials, so your history survives an uninstall; `www.` and non-`www.` spellings of one domain are one site.
+**Registration — on activation, once.** The plugin sends your site's domain to `https://nimbocdn-prd-control.nimbocdn.workers.dev/activate/start`, which answers with a random challenge. The plugin exposes that challenge for five minutes at `/wp-json/nimbocdn/v1/challenge`, at `/?nimbocdn-challenge=1`, and as a small text file `wp-content/uploads/nimbocdn-challenge-<random>.txt` with a blank PNG image of the same name next to it (both removed as soon as registration finishes). It then sends the domain, site name, WordPress version, plugin version, site language and the administrator email address to `/activate/finish`. The service reads the challenge from your site — proof that whoever registers the domain controls it. When a firewall or antibots answers the service with a challenge page of its own, the service checks instead the width and height of that PNG image, fetched through Cloudflare Images, which are derived from the challenge. A domain nobody registered before is registered even when the proof fails, so a firewall never leaves the plugin idle; until the proof succeeds the site stays on the free plan and cannot manage billing. Re-activating the same domain returns the same credentials, so your history survives an uninstall; `www.` and non-`www.` spellings of one domain are one site.
 
-**Health, account and home-page sync — from the background and from the settings screen.** Twice a day by WP-Cron, when you press *Measure now* (at most once a minute), when you open or return to the settings screen, and when your home page changes, the plugin sends your site identifier to `/health`, `/account` and `/site/home` on the same host. The last one carries the list of image files your home page uses, so the service can verify them by visiting your home page and answer which ones it will serve. The response says whether the service is available, which delivery hostname to use, your plan and allowance, and the delivery statistics shown on the settings screen. No visitor data, no page content and nothing about your posts is sent.
+**Health, account and home-page sync — from the background and from the settings screen.** Twice a day by WP-Cron, when you press *Measure now* (at most once a minute), when you open or return to the settings screen, and when your home page changes, the plugin sends your site identifier to `/health`, `/account` and `/site/home` on the same host. The last one carries the list of image files your home page uses and the HTML of your home page as your own server returns it, so the service can verify them — by visiting your home page, or, when a firewall or antibots blocks that visit, against the HTML the plugin sent — and answer which ones it will serve. The response says whether the service is available, which delivery hostname to use, your plan and allowance, and the delivery statistics shown on the settings screen. No visitor data and nothing about your posts other than your public home page is sent.
 
 **Image delivery — when a visitor loads a page.** The visitor's browser requests images from the delivery hostname (currently `cdn.nimbocdn.net`). That request carries the URL of the original image, the size of the file WordPress would otherwise have served, and the browser's own `Accept` header, as any image request does. For each image served, the edge records the delivered size, format and cache state against your site identifier — sampled on busy sites — never the visitor's IP address, user agent or page. When a request is refused (for example, a signature that does not match), the edge also records the URL of the refused original so the refusal can be investigated; that URL is a file path on your own site. The plugin itself makes no network call during a page view.
 
@@ -230,6 +230,12 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 
 == Changelog ==
 
+= 0.5.9 =
+* Works behind a hosting antibots (SiteGround and similar) with nothing for you to do. Measured on a SiteGround store on 19 September 2026: the domain could not be verified, so upgrading and billing were locked, and the free plan admitted 0 of the 72 images on the home page. With this version the domain was verified in 3 seconds and the home page images were admitted, without touching the firewall.
+* Domain verification writes a blank PNG image next to the verification file and removes both when it finishes. The service reads its size through Cloudflare Images, which the antibots let through.
+* Home page sync sends the HTML of your home page, read by your own server, so the service can check the images even when its own visit is blocked.
+* The settings screen no longer asks you to allow a user agent in your firewall.
+
 = 0.5.8 =
 * The settings screen loads its stylesheet through the WordPress style queue instead of printing a `<style>` tag in the page.
 * On WordPress 6.9 and later, image rewriting uses the template output buffer that WordPress itself opens and closes; the plugin no longer opens a buffer of its own. On earlier versions the buffer is closed explicitly at the end of the request.
@@ -298,6 +304,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 0.5.9 =
+Sites behind a hosting antibots (SiteGround and similar) now verify their domain and sync their home page with nothing to configure. Update at any time.
 
 = 0.5.7 =
 Documents a delivery change on our network: clients that accept neither AVIF nor WebP, almost always crawlers, now get your original file. Nothing changes in how the plugin rewrites your images. Update at any time.

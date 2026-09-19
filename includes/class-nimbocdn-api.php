@@ -17,7 +17,7 @@ class Api {
 
 	const TIMEOUT = 12;
 
-	public static function post( $path, array $body = array(), $with_auth = true ) {
+	public static function post( $path, array $body = array(), $with_auth = true, $timeout = self::TIMEOUT ) {
 		$headers = array( 'Content-Type' => 'application/json' );
 
 		if ( $with_auth ) {
@@ -35,7 +35,7 @@ class Api {
 		$response = wp_remote_post(
 			self::base() . $path,
 			array(
-				'timeout'     => self::TIMEOUT,
+				'timeout'     => max( 1, (int) $timeout ),
 				'redirection' => 2,
 				'headers'     => $headers,
 				'body'        => wp_json_encode( $body ),

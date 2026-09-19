@@ -189,6 +189,7 @@ class Probe {
 
 		if ( ! $job['synced'] && ! Home::serves_everything() ) {
 			$job['origins'] = Home::discover( $html );
+			$job['html'] = substr( $html, 0, Home::MAX_PAGE_BYTES );
 			$job['stage']   = 'sync';
 			self::save_job( $job );
 			self::progress( count( $job['urls'] ), 0, (int) $job['page'], 'sync' );
@@ -202,9 +203,10 @@ class Probe {
 			return 'budget';
 		}
 		$origins       = isset( $job['origins'] ) && is_array( $job['origins'] ) ? $job['origins'] : array();
+		$html          = isset( $job['html'] ) && is_string( $job['html'] ) ? $job['html'] : '';
 		$job['synced'] = true;
-		unset( $job['origins'] );
-		if ( ! empty( $origins ) && Home::sync( $origins, true ) ) {
+		unset( $job['origins'], $job['html'] );
+		if ( ! empty( $origins ) && Home::sync( $origins, true, $html ) ) {
 			$job['just_synced'] = true;
 			$job['stage']       = 'page';
 			self::save_job( $job );
