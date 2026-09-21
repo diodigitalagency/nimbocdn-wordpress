@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.5.12
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,6 +162,10 @@ No. Activation registers your site automatically and proves that you control the
 
 No. Nothing in your media library is modified, re-compressed, moved or deleted. The plugin only changes the address of the image in your HTML, so it points to our global network instead of your server.
 
+= Is NimboCDN a content delivery network (CDN) for images? =
+
+Yes, and only for images. Your pages, your CSS and your JavaScript keep being served by your own hosting exactly as they are today; only the images are answered by our network, from a point near each visitor. It is not a WebP converter that leaves a second copy of every file on your disk: each image is prepared the first time a real visitor asks for it, and nothing new is written to your server.
+
 = What exactly does the free plan include? =
 
 Every image on your home page, delivered in WebP at 400, 800 and 1200 pixels wide, from a permanent global cache, with up to 50 **new** home-page images per month. The allowance renews on the 1st. Traffic and visits are unlimited. No credit card.
@@ -190,9 +194,17 @@ That warning means your images are being sent as JPEG or PNG to browsers that ac
 
 That warning means the file is bigger than the space it is displayed in. NimboCDN offers three widths — 400, 800 and 1200 pixels — with a matching `sizes` attribute, and lets the browser pick. It never offers a width larger than the one WordPress already offered, so a page cannot get heavier than it was.
 
+= Does it handle responsive images and `srcset`? =
+
+Yes. NimboCDN offers each image at 400, 800 and 1200 pixels wide and writes the matching `srcset` and `sizes`, so the browser downloads the width it is actually going to show. An image that arrived without a responsive set gets one; an image that already had one keeps it, and no width larger than the one WordPress already offered is ever announced.
+
 = Does this make my site faster? =
 
 Yes, on the part that depends on images — which is usually the biggest part. Your visitor downloads far fewer bytes and gets them from a point near them, so the images appear sooner, and how fast your page appears is what Google measures. We can tell you how many bytes your visitors stopped downloading; we cannot promise a score or a position in search, because those also depend on your hosting, your theme and everything else on the page.
+
+= Does NimboCDN help with Core Web Vitals and LCP? =
+
+Yes, and on most sites that is where the biggest gain is. Largest Contentful Paint — LCP — is how long your page takes to show its main piece of content, and on most WordPress sites that piece is an image: exactly what NimboCDN makes lighter and delivers from a point near the visitor. On one real home page, weighed file by file, it came out 88% lighter at the same quality level, and a lighter image appears sooner. What we do not put a number on is your final score, because your hosting, your theme and the rest of the page count too — but on most sites the images are what your visitor is waiting for, and that is the part we take care of.
 
 = Does it work with JPEG and PNG, and with transparency? =
 
@@ -252,6 +264,10 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 6. The free plan: your home page optimized forever, and it says plainly which images WordPress is still serving.
 
 == Changelog ==
+
+= 1.0.0 =
+* First stable release. Nothing changes in how your images are delivered: the version number catches up with a plugin that is already serving real stores, and that is now published in the WordPress.org plugin directory.
+* Three answers added to the FAQ, for three questions the listing did not answer: whether NimboCDN is a content delivery network for images, how it handles responsive images and `srcset`, and what it does for Core Web Vitals and LCP.
 
 = 0.5.12 =
 * The package downloaded from nimbocdn.net now carries the Spanish and Portuguese translations, so the settings screen is in your language the moment you activate it. Sites installed from the WordPress.org directory are unaffected: they keep getting translations as language packs, which always take precedence over any bundled file.
@@ -338,6 +354,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.0 =
+First stable release. No change to how your images are delivered. Update at any time.
 
 = 0.5.12 =
 The copy downloaded from nimbocdn.net now shows the settings screen in Spanish and Portuguese without waiting for a language pack. Update at any time.

@@ -3,6 +3,10 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 1.0.0
+* First stable release. Nothing changes in how your images are delivered: the version number catches up with a plugin that is already serving real stores, and that is now published in the WordPress.org plugin directory.
+* Three answers added to the FAQ, for three questions the listing did not answer: whether NimboCDN is a content delivery network for images, how it handles responsive images and `srcset`, and what it does for Core Web Vitals and LCP.
+
 ## 0.5.12
 * The package downloaded from nimbocdn.net now carries the Spanish and Portuguese translations, so the settings screen is in your language the moment you activate it. Sites installed from the WordPress.org directory are unaffected: they keep getting translations as language packs, which always take precedence over any bundled file.
 
