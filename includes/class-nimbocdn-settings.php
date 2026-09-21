@@ -2735,8 +2735,8 @@ JS;
 		.nimbo-why-safe[open] summary span::before { content:"\25BE"; }
 		.nimbo-why-safe summary .nimbo-icon { color:var(--nb-muted); margin-top:0; }
 		.nimbo-why-safe p { margin:.4rem 0 0 1.75rem; }
-		.nimbo-why-plans { margin:0; padding-top:.7rem; border-top:1px solid var(--nb-rule); display:flex; flex-direction:column; gap:.35rem; font-size:12.5px; }
-		.nimbo-why-plans div { display:grid; grid-template-columns:3.2rem 1fr; gap:.5rem; align-items:baseline; }
+		.nimbo-why-plans { margin:0; padding-top:.7rem; border-top:1px solid var(--nb-rule); display:grid; grid-template-columns:max-content 1fr; column-gap:.55rem; row-gap:.35rem; align-items:baseline; font-size:12.5px; }
+		.nimbo-why-plans div { display:contents; }
 		.nimbo-why-plans dt { margin:0; font-weight:600; color:var(--nb-ink); }
 		.nimbo-why-plans dd { margin:0; color:var(--nb-muted); }
 		.nimbo-why-price { font-weight:600; color:var(--nb-ink); white-space:nowrap; }

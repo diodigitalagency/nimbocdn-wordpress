@@ -1,89 +1,112 @@
-=== NimboCDN ===
+=== NimboCDN – Image Optimization & Image CDN | Convert WebP & AVIF ===
 Contributors: mandrakecrm
 Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.5.10
+Stable tag: 0.5.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Image CDN for WordPress and WooCommerce: optimize images, resize and convert to WebP and AVIF from a global edge. Free forever on your home page.
+Image CDN for WordPress and WooCommerce: a faster site, with your images in the most modern, most efficient format — WebP or AVIF.
 
 == Description ==
 
-**NimboCDN is an image CDN and image optimization service for WordPress. It resizes every image, converts it to WebP or AVIF, and serves it from a global edge network — without touching a single original file, and without an account, an API key or a bulk compression job.**
+**NimboCDN is an image CDN for WordPress and WooCommerce. Every image on your site is resized and converted to WebP or AVIF — the most modern and efficient image formats there are, with no loss in perceived quality — and delivered from our global network, in 335 cities. Your own server stops delivering images and your site gets faster. You do not need to create an account or paste an API key, and there is no bulk compression process to run on your server. We never modify your original files.**
 
-Images are the heaviest part of almost every page, and usually the element that decides the Largest Contentful Paint — the Core Web Vitals metric Google measures. A WooCommerce catalogue, where one product can carry five images, sends most of that weight to phones that will never display it at full size. NimboCDN fixes "serve images in next-gen formats" and "properly size images" at the source: the image that reaches the visitor is the size their screen needs, in the lightest format their browser accepts.
+You upload a large image and WordPress keeps the file exactly as it came. That is the file your visitor's browser downloads — whole, even when the image shows up small on a phone. Your visitor waits for weight they never get to see, and that weight leaves from your server: every image, to every visitor, every single time.
 
-= How it works =
+**NimboCDN takes care of that on its own.** Every visitor receives each image in the size their screen needs and the best format their browser accepts. You configure nothing.
 
-1. **Install and activate.** The plugin registers your site with the service and measures your home page in the background. Nothing to configure.
-2. **The plugin rewrites image URLs** in your HTML — `src`, `srcset`, `<picture>` sources, gallery zoom and lightbox links, CSS background images — so they point at our network instead of your server.
-3. **The edge does the heavy lifting.** The first time a real visitor asks for an image, the network fetches your original once, resizes it, encodes it as AVIF or WebP depending on the browser, and keeps the result in a permanent cache. From then on your server never sees that request again. A client that accepts neither format gets your original file, exactly as without the plugin.
+= 👀 What NimboCDN does, at a glance =
 
-Your files are never modified, moved, re-compressed or deleted. Deactivate the plugin and your site serves its own images again, immediately.
+* **Optimize images automatically** — no bulk job, no queue, nothing to click
+* **Resize images** to the width the screen needs, with a matching `srcset`
+* **Convert to WebP and AVIF**, chosen per visitor from what their browser accepts
+* **Serve from a global image CDN** — 335 cities in more than 125 countries
+* **Delegate image delivery to our network**, so your server can get on with your blog or shop
+* **Leave every original file untouched**, and undo the whole thing in one click
+* **No account, no API key, no credit card** — install, activate, done
 
-= Free forever on your home page =
+= ⚙️ How NimboCDN works =
 
-The free plan is not a trial and does not expire. It serves **every image on your home page** in WebP, in three sizes, from the global cache, with up to **50 new home-page images per month**. The rest of your site keeps being served by WordPress exactly as before. Visits are never counted or charged: ten visitors or ten thousand, the price is the same.
+1. **Install and activate.** The plugin registers your site and measures your home page in the background. Nothing to configure, no key to paste.
+2. **The plugin rewrites your image URLs.** In your HTML it updates `src`, `srcset`, `<picture>` sources, gallery zoom and lightbox links and CSS backgrounds, so they point at our network. Nothing else changes.
+3. **Our network does the heavy lifting.** The first time a real visitor asks for an image, the network fetches your original once, resizes it, encodes it as AVIF or WebP for that browser and keeps the result in a permanent cache. From then on your server never sees that request again.
 
-That number is here, before you install, on purpose. You should know exactly what you are getting.
+= 🚀 Your server stops delivering images =
 
-= Why NimboCDN =
+On a normal WordPress site, serving images is the bulk of the work your server does: on a page with twenty images there are twenty files to find on disk, read and push out, for every visitor, all day. That work competes with what you actually care about — building the page, running the queries, taking the order.
 
-* **Zero configuration.** No account to create, no API key to paste, no bulk optimization to sit through. Install, activate, done.
-* **Your originals stay untouched.** Most image optimization plugins are library compressors: they re-compress the files on your server and charge you for what you *upload*. WordPress generates six to eight thumbnails per upload, so you pay for sizes no visitor will ever request.
-* **You pay for what is seen, not for what is stored.** An image is processed once, the first time a real visitor asks for it.
-* **Unlimited traffic on every plan.** No bandwidth charge, no per-visit charge, no overage.
-* **Your server stops delivering images.** Resizing and re-encoding happen on our side; once an image is prepared it comes from the cache, from a network of 335 cities in more than 125 countries.
-* **Completely reversible.** Deactivate and everything goes back at once. Uninstall and not one option, transient or scheduled task is left behind.
+With NimboCDN your server delegates that job. It is asked once per image, ever; after that our network answers. **Measured on real traffic: 98.7% of the images visitors received never came out of the site's own server.** What is left is what your server is for — showing your blog, your shop, your pages.
 
-= What the free plan includes =
+= 🌎 An image CDN, not an image compressor =
 
-* Every image on your home page, in WebP, at 400, 800 and 1200 pixels wide
-* Up to 50 new home-page images a month, renewed on the 1st
-* Unlimited traffic and unlimited visits
-* A permanent global cache
-* No credit card
+Most plugins that optimize images for WordPress are library compressors: an image optimizer that works on the files you already uploaded. They re-compress what sits on your server and charge you for what you **upload** — and since WordPress makes six to eight thumbnails per upload, you pay for sizes no visitor will ever request.
 
-= What Pro adds =
+NimboCDN works at the other end, on what actually reaches the visitor:
+
+* An image is processed **once**, the first time a real visitor asks for it. No bulk optimization to sit through.
+* **Traffic is unlimited on every plan.** No bandwidth charge, no per-visit charge, no overage.
+* **One click to undo.** Deactivate the plugin and your site serves its own images again, immediately.
+
+= 🔄 Convert images to WebP and AVIF, automatically =
+
+Every image is delivered as AVIF or WebP depending on what the visitor's browser accepts — no converter to run, no second copy on your server. A client that accepts neither gets your original file, exactly as without the plugin.
+
+= 📐 Properly size images for every screen =
+
+A phone does not need a 3000-pixel file. You never have to resize images by hand or regenerate thumbnails again: NimboCDN offers each image at 400, 800 and 1200 pixels wide with a matching `sizes` attribute and lets the browser pick. No width larger than the one WordPress offered is ever announced, so a page can never get heavier than it was.
+
+This is exactly what PageSpeed Insights asks for when it reports *serve images in next-gen formats* and *properly size images*.
+
+= 📁 We never modify your original files =
+
+Your JPEG and PNG files stay exactly as you uploaded them: not re-compressed, not resized, not moved, not deleted. The plugin only changes the address of the image in your HTML.
+
+= 🎁 Free forever on your home page =
+
+The free plan is not a trial and does not expire. It serves **every image on your home page** in WebP, in three sizes, from the global cache, with up to **50 new home-page images per month** — the number is here, before you install, on purpose. The rest of your site keeps being served by WordPress exactly as before, and visits are never counted or charged: ten visitors or ten thousand, it stays free.
+
+= 👑 What the Pro plan adds =
 
 * **Your whole site**: catalogue, product pages, blog and pages — not just the home page
 * **AVIF**, about 21% lighter than WebP on the same image
 * **No image limit**
 * One fixed price, monthly or annual, with bandwidth included
 
-Pro is a paid plan of the hosted service. All of the plugin's code is here and fully functional on every plan; the plan only changes what the network serves.
+Pro is a paid plan of the hosted service — there is no second plugin to install. You switch plans from this same settings screen, and all the plugin's code is here and works on every plan; the plan only changes what the network serves.
 
-= Formats, chosen by measurement =
+= 🛒 Built for WooCommerce, works on any WordPress site =
 
-Images are delivered as AVIF or WebP depending on what the visitor's browser accepts. A client that accepts neither — measured in September 2026, almost always a crawler — receives a JPEG or PNG copy if one was already made, and your original file otherwise; no new copy is made for it. That order was chosen by measuring, not by convention. Across 14 product images from two real stores, compared at the same quality level, AVIF needed **32.1% fewer bytes than JPEG** — winning in 14 of 14 — and WebP **21.8% fewer**, winning in 11 of 14.
+NimboCDN was built for WooCommerce stores and tested on them: product galleries, gallery zoom (`data-large_image`), lightboxes, category banners and CSS background heroes. A catalogue is where image weight hurts most — one product page can carry five images, a category page forty.
 
-We can tell you how much lighter your images travel; the settings screen shows it measured on your own home page and on your real traffic. We will not promise you a faster page or a better position on Google, because those depend on your hosting, your theme and everything else on the page.
+It works just as well on a blog, a portfolio or a company site, and is at its most useful on shared hosting, where delegating image delivery is the cheapest speed there is. WooCommerce is not required.
 
-= Built for WooCommerce, works on any WordPress site =
+= 🧩 Works with your caching plugin, your page builder and your theme =
 
-WooCommerce stores are what NimboCDN was built for and tested against: product galleries, gallery zoom (`data-large_image`), lightboxes, category banners and hero sections set as CSS backgrounds. It works on any WordPress site, with or without WooCommerce.
+* **Caching plugins.** The plugin only rewrites image attributes, and cached HTML stays valid: old delivery hostnames keep working indefinitely, by design.
+* **Page builders and themes.** Elementor, Divi, Gutenberg blocks, galleries and sliders all produce the same HTML, which is where the plugin works.
+* **Existing WebP plugins.** If another plugin wraps your images in a `<picture>` block with its own WebP copies, NimboCDN finds the original behind it and serves that.
+* **Lazy loading.** No JavaScript is added to your pages, and your theme's lazy loading is untouched.
 
-* **Caching plugins.** NimboCDN only rewrites image attributes, and cached HTML containing rewritten URLs stays valid — old delivery hostnames keep working indefinitely, by design.
-* **Existing WebP plugins.** If another plugin already wraps your images in a `<picture>` block with its own WebP copies, NimboCDN finds the original behind the copy and serves that, so the two do not compress the same file twice.
-* **Responsive images.** Images that carry no `srcset` get one, with a matching `sizes`, so a phone downloads a phone-sized file. Images that already have a responsive set are left as WordPress made them, and no width larger than the one WordPress offered is ever announced.
-* **Lazy loading.** The plugin adds no JavaScript to your pages and does not replace your theme's or WordPress's own lazy loading.
+= 🛡️ If anything goes wrong =
 
-= If anything goes wrong =
-
-Three independent fallbacks, and every one of them ends with the visitor seeing your image:
+Three independent fallbacks, each ending with the visitor seeing your image:
 
 1. If the service stops responding, the plugin stops rewriting URLs and WordPress serves its own images.
 2. If a single image cannot be processed, the edge redirects to your original.
 3. If even that fails, the `<img>` element falls back to the file WordPress would have served.
 
-The plugin makes no network call during a page view: the decision to rewrite is read from options, never from the network. NimboCDN cannot become a single point of failure for your site.
+The plugin makes no network call during a page view, so it cannot become a single point of failure.
 
-= Privacy in one paragraph =
+= 🔒 Privacy in one paragraph =
 
-No personal data about your visitors is collected — not their IP address, not their browser, not the page they viewed. The service keeps aggregate counts and byte totals per site so the settings screen can show what your visitors stopped downloading. What the plugin sends, when, and why is listed in full under *External services* below. Product emails are optional and can be switched off from the settings screen. Full policy: https://nimbocdn.net/privacy
+No personal data about your visitors is collected — not their IP address, not their browser, not the page they viewed. The service keeps aggregate counts and byte totals per site, so the settings screen can show what your visitors stopped downloading. Everything the plugin sends is listed under *External services* below. https://nimbocdn.net/privacy
+
+= 👉 Try it on your home page, free =
+
+**Install NimboCDN, activate it, and open Settings → NimboCDN.** Your home page is where that weight hurts most — it is the page most visitors see first — so that is the one we weigh, right there, before you decide anything. No account, no card, one click to undo.
 
 == External services ==
 
@@ -151,7 +174,7 @@ No. It is not a trial and it does not expire. Visits cost us almost nothing, so 
 
 No. Pro is one fixed price with bandwidth included: no charge per visit, per gigabyte, or for going over. If a payment fails there are three days of grace and then the site falls back to the free plan — your images never break.
 
-= What does Pro add? =
+= What does the Pro plan add? =
 
 Your whole site instead of just the home page — catalogue, product pages, blog and pages — in AVIF, which is about 21% lighter than WebP on the same image, with no image limit. Monthly or annual billing.
 
@@ -167,9 +190,9 @@ That warning means your images are being sent as JPEG or PNG to browsers that ac
 
 That warning means the file is bigger than the space it is displayed in. NimboCDN offers three widths — 400, 800 and 1200 pixels — with a matching `sizes` attribute, and lets the browser pick. It never offers a width larger than the one WordPress already offered, so a page cannot get heavier than it was.
 
-= Does it help with Core Web Vitals and page speed? =
+= Does this make my site faster? =
 
-Images are usually the heaviest part of a page and usually what decides the Largest Contentful Paint, so making them lighter helps the metric Google measures. We can tell you how many bytes your visitors stopped downloading; we cannot promise a page speed score or a position in search, because those depend on your hosting, your theme and everything else on the page.
+Yes, on the part that depends on images — which is usually the biggest part. Your visitor downloads far fewer bytes and gets them from a point near them, so the images appear sooner, and how fast your page appears is what Google measures. We can tell you how many bytes your visitors stopped downloading; we cannot promise a score or a position in search, because those also depend on your hosting, your theme and everything else on the page.
 
 = Does it work with JPEG and PNG, and with transparency? =
 
@@ -221,14 +244,21 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 
 == Screenshots ==
 
-1. Install, activate, done — no account, no API key, and no bulk compression process to sit through.
-2. The settings screen on Pro: what your visitors actually downloaded, measured at the edge. Settings → NimboCDN.
-3. Your home page weighed file by file, before and after, at the same quality level.
-4. The free plan: your home page optimized forever, and it says plainly which images WordPress is still serving.
-5. Your original JPEG and PNG files are never modified, moved or deleted. Deactivate and everything goes back.
-6. The heavy lifting moves to our side: your server is asked once per image and never again.
+1. An image CDN for WordPress: every image reaches the visitor resized and in WebP or AVIF, from our global network — not from your server.
+2. Measured, not promised: one real home page weighed file by file, 88% lighter at the same quality level.
+3. Your original JPEG and PNG files are never modified, moved or deleted. Deactivate and everything goes back, instantly.
+4. The settings screen on Pro: what your visitors actually downloaded, measured at the edge. Settings → NimboCDN.
+5. Install, activate, done — no account, no API key, and no bulk compression process to sit through.
+6. The free plan: your home page optimized forever, and it says plainly which images WordPress is still serving.
 
 == Changelog ==
+
+= 0.5.12 =
+* The package downloaded from nimbocdn.net now carries the Spanish and Portuguese translations, so the settings screen is in your language the moment you activate it. Sites installed from the WordPress.org directory are unaffected: they keep getting translations as language packs, which always take precedence over any bundled file.
+
+= 0.5.11 =
+* The settings screen no longer runs the free and Pro plan labels into their own text in Spanish and Portuguese. The label column was a fixed width sized for the English "Free"; "Gratuito" is twice as long and touched its description with no gap. Found on 20 September 2026, rendering the screen in all three languages for the directory screenshots.
+* Directory listing rewritten: what NimboCDN is and what it does, in English, Spanish and Portuguese. Nothing in the plugin's behaviour changes.
 
 = 0.5.10 =
 * When your domain is verified, the plugin empties your page cache so cached pages come back with the new image addresses. Measured on a store running WP Rocket on 19 September 2026: after verification, 3,393 cached pages kept the old addresses and loaded the original images. Supported: WP Rocket, LiteSpeed Cache, W3 Total Cache, WP Super Cache, WP Fastest Cache, SiteGround Speed Optimizer, Cache Enabler, Hummingbird, WP-Optimize, Comet Cache, Swift Performance, Proxy Cache Purge, Cloudflare, and the Kinsta, WP Engine, Pantheon, GoDaddy and Pressable host caches.
@@ -308,6 +338,12 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 0.5.12 =
+The copy downloaded from nimbocdn.net now shows the settings screen in Spanish and Portuguese without waiting for a language pack. Update at any time.
+
+= 0.5.11 =
+Fixes the plan labels overlapping their own text on the settings screen in Spanish and Portuguese. Update at any time.
 
 = 0.5.10 =
 After your domain is verified, cached pages are refreshed so every image keeps being optimized. Update at any time.

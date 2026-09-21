@@ -3,6 +3,13 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 0.5.12
+* The package downloaded from nimbocdn.net now carries the Spanish and Portuguese translations, so the settings screen is in your language the moment you activate it. Sites installed from the WordPress.org directory are unaffected: they keep getting translations as language packs, which always take precedence over any bundled file.
+
+## 0.5.11
+* The settings screen no longer runs the free and Pro plan labels into their own text in Spanish and Portuguese. The label column was a fixed width sized for the English "Free"; "Gratuito" is twice as long and touched its description with no gap. Found on 20 September 2026, rendering the screen in all three languages for the directory screenshots.
+* Directory listing rewritten: what NimboCDN is and what it does, in English, Spanish and Portuguese. Nothing in the plugin's behaviour changes.
+
 ## 0.5.10
 * When your domain is verified, the plugin empties your page cache so cached pages come back with the new image addresses. Measured on a store running WP Rocket on 19 September 2026: after verification, 3,393 cached pages kept the old addresses and loaded the original images. Supported: WP Rocket, LiteSpeed Cache, W3 Total Cache, WP Super Cache, WP Fastest Cache, SiteGround Speed Optimizer, Cache Enabler, Hummingbird, WP-Optimize, Comet Cache, Swift Performance, Proxy Cache Purge, Cloudflare, and the Kinsta, WP Engine, Pantheon, GoDaddy and Pressable host caches.
 * Our network also keeps accepting the previous addresses for 30 days, so any cache the plugin cannot reach keeps serving optimized images.
