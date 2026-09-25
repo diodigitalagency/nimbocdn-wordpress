@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -265,6 +265,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 
 == Changelog ==
 
+= 1.0.2 =
+* Sites running Elementor on WordPress 6.9 or later: images are delivered through NimboCDN in full again. Elementor switches off the page buffer that WordPress 6.9 introduced, and the plugin relied on it, so only each image's main address was rewritten: the responsive sizes that browsers actually download (`srcset`), theme images, lazy-loaded images, backgrounds and lightbox links stayed on your server. Measured on 25 September 2026: 24 of 24 home page images on one site. The plugin now opens its own buffer when WordPress does not start one, never both, and leaves Elementor's editor preview as it was.
+
 = 1.0.1 =
 * SVG, BMP, PDF, ICO and TIFF files are no longer sent to the image network. It cannot optimize them, so each one cost your visitors a redirect back to your own server: measured on 25 September 2026, one site's SVG logo took that detour on every page view. WordPress serves them exactly as it did before you installed the plugin, and on the free plan they no longer use up the month's allowance.
 * Free plan: home page images are now recognised when WebP Express replaces their addresses with its own WebP copies. Before, a site using it had none of its photos admitted. Savings are measured against the weight of that WebP copy, not the original.
@@ -361,6 +364,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Sites with Elementor on WordPress 6.9+: responsive image sizes, theme images, backgrounds and lightbox links are delivered through NimboCDN again. Update at any time.
 
 = 1.0.1 =
 Stops sending SVG and other files the network cannot optimize, admits home page images served by WebP Express and CSS backgrounds on the free plan, and fixes an error with WP Offload Media or WPML. Update at any time.

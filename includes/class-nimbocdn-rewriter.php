@@ -112,12 +112,52 @@ class Rewriter {
 		}
 		if ( function_exists( 'wp_start_template_enhancement_output_buffer' ) ) {
 			add_filter( 'wp_template_enhancement_output_buffer', array( __CLASS__, 'filter_output' ) );
+			add_action( 'wp_before_include_template', array( __CLASS__, 'ensure_buffer' ), 1001 );
 			return;
 		}
 		if ( ob_start( array( __CLASS__, 'filter_output' ) ) ) {
 			self::$buffer_level = ob_get_level();
 			add_action( 'shutdown', array( __CLASS__, 'end_buffer' ), 0 );
 		}
+	}
+
+	public static function ensure_buffer() {
+		if ( in_array( 'wp_finalize_template_enhancement_output_buffer', ob_list_handlers(), true ) ) {
+			return;
+		}
+		if ( self::is_elementor_preview() ) {
+			return;
+		}
+		remove_filter( 'wp_template_enhancement_output_buffer', array( __CLASS__, 'filter_output' ) );
+		if ( ob_start( array( __CLASS__, 'filter_own_buffer' ) ) ) {
+			self::$buffer_level = ob_get_level();
+			add_action( 'shutdown', array( __CLASS__, 'end_buffer' ), 0 );
+		}
+	}
+
+	public static function filter_own_buffer( $output, $phase = 0 ) {
+		if ( ( (int) $phase & PHP_OUTPUT_HANDLER_CLEAN ) !== 0 || ! self::is_html_response() ) {
+			return $output;
+		}
+		return self::filter_output( $output );
+	}
+
+	private static function is_html_response() {
+		foreach ( headers_list() as $header ) {
+			$parts = explode( ':', strtolower( $header ), 2 );
+			if ( 2 === count( $parts ) && 'content-type' === $parts[0] ) {
+				return in_array( trim( (string) strtok( $parts[1], ';' ) ), array( 'text/html', 'application/xhtml+xml' ), true );
+			}
+		}
+		return in_array( ini_get( 'default_mimetype' ), array( 'text/html', 'application/xhtml+xml' ), true );
+	}
+
+	private static function is_elementor_preview() {
+		if ( ! class_exists( '\Elementor\Plugin' ) || ! isset( \Elementor\Plugin::$instance ) ) {
+			return false;
+		}
+		$preview = isset( \Elementor\Plugin::$instance->preview ) ? \Elementor\Plugin::$instance->preview : null;
+		return is_object( $preview ) && method_exists( $preview, 'is_preview_mode' ) && (bool) $preview->is_preview_mode();
 	}
 
 	private static $buffer_level = 0;
