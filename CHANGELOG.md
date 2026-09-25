@@ -3,6 +3,13 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 1.0.1
+* SVG, BMP, PDF, ICO and TIFF files are no longer sent to the image network. It cannot optimize them, so each one cost your visitors a redirect back to your own server: measured on 25 September 2026, one site's SVG logo took that detour on every page view. WordPress serves them exactly as it did before you installed the plugin, and on the free plan they no longer use up the month's allowance.
+* Free plan: home page images are now recognised when WebP Express replaces their addresses with its own WebP copies. Before, a site using it had none of its photos admitted. Savings are measured against the weight of that WebP copy, not the original.
+* Free plan: CSS background images on the home page, such as banners and hero sections, are now included.
+* WordPress older than 6.9 with WebP Express: images and backgrounds whose address it rewrote are now delivered through NimboCDN as well.
+* Fixed an error that stopped the home page sync, and the measurement after activation, when another plugin filters attachment lookups (WP Offload Media, WPML and others).
+
 ## 1.0.0
 * First stable release. Nothing changes in how your images are delivered: the version number catches up with a plugin that is already serving real stores, and that is now published in the WordPress.org plugin directory.
 * Three answers added to the FAQ, for three questions the listing did not answer: whether NimboCDN is a content delivery network for images, how it handles responsive images and `srcset`, and what it does for Core Web Vitals and LCP.

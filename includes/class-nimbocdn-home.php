@@ -76,7 +76,8 @@ class Home {
 	}
 
 	public static function discover( $html ) {
-		if ( ! preg_match_all( '/<img\b[^>]*>/i', $html, $tags ) ) {
+		$backgrounds = Rewriter::background_urls( $html );
+		if ( ! preg_match_all( '/<img\b[^>]*>/i', $html, $tags ) && empty( $backgrounds ) ) {
 			return array();
 		}
 		$cdn      = Settings_Store::cdn_host();
@@ -84,30 +85,32 @@ class Home {
 		$base_url = isset( $uploads['baseurl'] ) ? (string) $uploads['baseurl'] : '';
 		$files    = array();
 
+		$candidates = $backgrounds;
 		foreach ( $tags[0] as $tag ) {
-			$candidates = array();
 			if ( preg_match( '/\bsrc=["\']([^"\']+)["\']/i', $tag, $m ) ) {
-				$candidates[] = $m[1];
+				$candidates[] = html_entity_decode( $m[1], ENT_QUOTES );
 			}
 			if ( preg_match( '/\bdata-src=["\']([^"\']+)["\']/i', $tag, $m ) ) {
-				$candidates[] = $m[1];
+				$candidates[] = html_entity_decode( $m[1], ENT_QUOTES );
 			}
 			if ( preg_match( '/\bsrcset=["\']([^"\']+)["\']/i', $tag, $m ) ) {
 				foreach ( explode( ',', $m[1] ) as $piece ) {
-					$candidates[] = trim( explode( ' ', trim( $piece ) )[0] );
+					$candidates[] = html_entity_decode( trim( explode( ' ', trim( $piece ) )[0] ), ENT_QUOTES );
 				}
 			}
-			foreach ( $candidates as $raw ) {
-				$url = html_entity_decode( $raw, ENT_QUOTES );
-				if ( '' !== $cdn && false !== strpos( $url, $cdn ) ) {
-					$parts = explode( '/', (string) wp_parse_url( $url, PHP_URL_PATH ) );
-					$url   = rawurldecode( (string) end( $parts ) );
-				}
-				if ( '' === $base_url || 0 !== strpos( $url, $base_url ) ) {
+		}
+		foreach ( $candidates as $url ) {
+			if ( '' !== $cdn && false !== strpos( $url, $cdn ) ) {
+				$parts = explode( '/', (string) wp_parse_url( $url, PHP_URL_PATH ) );
+				$url   = rawurldecode( (string) end( $parts ) );
+			}
+			if ( '' === $base_url || 0 !== strpos( $url, $base_url ) ) {
+				$url = Rewriter::original_of_derivative( $url );
+				if ( null === $url ) {
 					continue;
 				}
-				$files[ strtok( $url, '?' ) ] = true;
 			}
+			$files[ strtok( $url, '?' ) ] = true;
 		}
 
 		$origins = array();
@@ -178,6 +181,33 @@ class Home {
 			}
 		}
 		return $out;
+	}
+
+	private static function origin_of( $url ) {
+		static $memo = array();
+
+		$url = strtok( $url, '?' );
+		if ( isset( $memo[ $url ] ) ) {
+			return $memo[ $url ];
+		}
+
+		$memo[ $url ] = self::resolve_origin( $url );
+		return $memo[ $url ];
+	}
+
+	private static function resolve_origin( $url ) {
+		$bare = preg_replace( '/-\d+x\d+(?=\.[a-z0-9]{2,5}$)/i', '', $url );
+
+		if ( preg_match( '#/uploads/\d{4}/\d{2}/#', $url ) ) {
+			foreach ( array_unique( array( $url, $bare, preg_replace( '/(?=\.[a-z0-9]{2,5}$)/i', '-scaled', $bare, 1 ) ) ) as $try ) {
+				$id = attachment_url_to_postid( $try );
+				if ( $id > 0 ) {
+					return Rewriter::origin_for( $id );
+				}
+			}
+		}
+
+		return Rewriter::origin_for_src( $url );
 	}
 
 	public static function sync( array $origins, $force = false, $html = '' ) {

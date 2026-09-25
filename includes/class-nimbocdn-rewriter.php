@@ -8,6 +8,13 @@ class Rewriter {
 
 	const MARKER = '/i/';
 
+	const TRANSFORMABLE = '/\.(?:jpe?g|jpe|png|gif|webp|avif)$/i';
+
+	public static function is_transformable( $url ) {
+		$path = wp_parse_url( (string) $url, PHP_URL_PATH );
+		return is_string( $path ) && 1 === preg_match( self::TRANSFORMABLE, $path );
+	}
+
 	public static function init() {
 		add_filter( 'wp_get_attachment_image_attributes', array( __CLASS__, 'filter_attributes' ), 20, 3 );
 		add_filter( 'wp_calculate_image_srcset', array( __CLASS__, 'filter_srcset' ), 20, 5 );
@@ -178,17 +185,41 @@ class Rewriter {
 			return $filtered;
 		}
 
+		$out = $anchors;
+		foreach ( self::background_patterns() as $pattern ) {
+			$backgrounds = preg_replace_callback( $pattern, array( __CLASS__, 'rewrite_css_url' ), $out );
+			if ( is_string( $backgrounds ) ) {
+				$out = $backgrounds;
+			}
+		}
+		return $out;
+	}
+
+	private static function background_patterns() {
 		$uploads = wp_upload_dir();
 		$path    = empty( $uploads['baseurl'] ) ? '' : wp_parse_url( $uploads['baseurl'], PHP_URL_PATH );
 		if ( ! is_string( $path ) || '' === trim( $path, '/' ) ) {
-			return $anchors;
+			return array();
 		}
-		$backgrounds = preg_replace_callback(
+		return array(
 			'/url\((["\']?)(https?:\/\/[^"\')\s]+?' . preg_quote( '/' . trim( $path, '/' ) . '/', '/' ) . '[^"\')\s]+?\.(?:jpe?g|png|gif|webp)(?:\?[^"\')\s]*)?)\1\)/i',
-			array( __CLASS__, 'rewrite_css_url' ),
-			$anchors
+			'/url\((["\']?)(https?:\/\/[^"\')\s]+?\.(?:jpe?g|png|gif)\.(?:webp|avif)(?:\?[^"\')\s]*)?)\1\)/i',
 		);
-		return is_string( $backgrounds ) ? $backgrounds : $anchors;
+	}
+
+	public static function background_urls( $html ) {
+		$urls = array();
+		if ( false === stripos( (string) $html, 'url(' ) ) {
+			return $urls;
+		}
+		foreach ( self::background_patterns() as $pattern ) {
+			if ( preg_match_all( $pattern, (string) $html, $m ) ) {
+				foreach ( $m[2] as $u ) {
+					$urls[] = html_entity_decode( $u, ENT_QUOTES );
+				}
+			}
+		}
+		return $urls;
 	}
 
 	private static function rewrite_picture_block( $block ) {
@@ -264,12 +295,23 @@ class Rewriter {
 	}
 
 	private static function hero_url( $src ) {
-		$file = self::uploads_file( $src );
+		$declared = null;
+		$file     = self::uploads_file( $src );
 		if ( null === $file ) {
-			return null;
+			$original = self::original_of_derivative( $src );
+			$file     = null === $original ? null : self::uploads_file( $original );
+			if ( null === $file ) {
+				return null;
+			}
+			$declared = self::local_bytes( $src );
+			$src      = $original;
 		}
 		$width = self::origin_width( self::source_file( $file ) );
-		return self::delivery_url_for_src( $src, max( $width, Signer::MAX_OFFERED_WIDTH ), true );
+		return self::delivery_url_for_src( $src, max( $width, Signer::MAX_OFFERED_WIDTH ), true, $declared );
+	}
+
+	private static function has_derivative( $srcset ) {
+		return 1 === preg_match( '/\.(?:jpe?g|png|gif)\.(?:webp|avif)(?:[?\s,]|$)/i', $srcset );
 	}
 
 	private static function rewrite_tag( $matches ) {
@@ -292,9 +334,11 @@ class Rewriter {
 			$width = (int) $w[1];
 		}
 
+		$source = $original;
+
 		if ( ! $already_ours ) {
 
-			$url = self::delivery_url_for_src( $original, $width > 0 ? $width : Signer::MAX_OFFERED_WIDTH );
+			$url = self::delivery_url_or_derivative( $original, $width > 0 ? $width : Signer::MAX_OFFERED_WIDTH, $source );
 			if ( null !== $url ) {
 				$onerror   = "this.onerror=null;this.srcset='';this.src='" . esc_js( $original ) . "';";
 				$rewritten = str_replace( $src[0], ' src="' . esc_url( $url ) . '"', $tag );
@@ -303,9 +347,9 @@ class Rewriter {
 
 		if ( ! preg_match( '/\ssrcset=/i', $rewritten )
 			&& ! preg_match( '/\sdata-(lazy-)?srcset=/i', $rewritten ) ) {
-			$file = self::uploads_file( $original );
+			$file = self::uploads_file( $source );
 			if ( null !== $file ) {
-				$own = self::own_srcset( $original, self::origin_width( $file ), $width );
+				$own = self::own_srcset( $source, self::origin_width( $file ), $width );
 				if ( null !== $own ) {
 					$rewritten = str_replace(
 						'<img ',
@@ -317,7 +361,7 @@ class Rewriter {
 		}
 
 		if ( preg_match( '/\ssrcset=(["\'])(.*?)\1/is', $rewritten, $set ) ) {
-			$updated = self::rewrite_srcset( $set[2] );
+			$updated = self::rewrite_srcset( $set[2], self::has_derivative( $set[2] ) );
 			if ( null !== $updated ) {
 				$rewritten = str_replace( $set[0], ' srcset="' . esc_attr( $updated ) . '"', $rewritten );
 			}
@@ -332,7 +376,7 @@ class Rewriter {
 				if ( 'data-large_image' === $attr || 'data-full-url' === $attr ) {
 					$url = self::hero_url( $value );
 				} else {
-					$url = self::delivery_url_for_src( $value, $width > 0 ? $width : Signer::MAX_OFFERED_WIDTH );
+					$url = self::delivery_url_or_derivative( $value, $width > 0 ? $width : Signer::MAX_OFFERED_WIDTH );
 				}
 				if ( null !== $url ) {
 					$rewritten = str_replace( $m[0], ' ' . $attr . '="' . esc_url( $url ) . '"', $rewritten );
@@ -341,7 +385,7 @@ class Rewriter {
 		}
 		foreach ( array( 'data-srcset', 'data-lazy-srcset' ) as $attr ) {
 			if ( preg_match( '/\s' . preg_quote( $attr, '/' ) . '=(["\'])(.*?)\1/is', $rewritten, $m ) ) {
-				$updated = self::rewrite_srcset( $m[2] );
+				$updated = self::rewrite_srcset( $m[2], self::has_derivative( $m[2] ) );
 				if ( null !== $updated ) {
 					$rewritten = str_replace( $m[0], ' ' . $attr . '="' . esc_attr( $updated ) . '"', $rewritten );
 				}
@@ -409,7 +453,7 @@ class Rewriter {
 			if ( null === $url && $translate && $mirable ) {
 				$original = self::original_behind_foreign_derivative( $candidate );
 				if ( null !== $original ) {
-					$url = self::delivery_url_for_src( $original, $width );
+					$url = self::delivery_url_for_src( $original, $width, false, self::local_bytes( $candidate ) );
 					if ( null !== $url ) {
 						$translated = true;
 					}
@@ -483,6 +527,46 @@ class Rewriter {
 		return null;
 	}
 
+	public static function original_of_derivative( $url ) {
+		$path = wp_parse_url( (string) $url, PHP_URL_PATH );
+		if ( ! is_string( $path ) || ! preg_match( '/\.(?:jpe?g|png|gif)\.(?:webp|avif)$/i', $path ) ) {
+			return null;
+		}
+		return self::original_behind_foreign_derivative( $url );
+	}
+
+	private static function local_bytes( $url ) {
+		$path = wp_parse_url( (string) $url, PHP_URL_PATH );
+		$base = wp_parse_url( content_url(), PHP_URL_PATH );
+		if ( ! is_string( $path ) || ! is_string( $base ) || '' === $base ) {
+			return null;
+		}
+		$path = rawurldecode( $path );
+		if ( 0 !== strpos( $path, $base . '/' ) || false !== strpos( $path, '..' ) ) {
+			return null;
+		}
+		$file = WP_CONTENT_DIR . substr( $path, strlen( $base ) );
+		$size = is_file( $file ) ? filesize( $file ) : false;
+		return is_int( $size ) && $size > 0 ? $size : null;
+	}
+
+	private static function delivery_url_or_derivative( $src, $width, &$source = null ) {
+		$source = $src;
+		$url    = self::delivery_url_for_src( $src, $width );
+		if ( null !== $url ) {
+			return $url;
+		}
+		$original = self::original_of_derivative( $src );
+		if ( null === $original ) {
+			return null;
+		}
+		$url = self::delivery_url_for_src( $original, $width, false, self::local_bytes( $src ) );
+		if ( null !== $url ) {
+			$source = $original;
+		}
+		return $url;
+	}
+
 	private static function origin_width( $file ) {
 		static $cache = array();
 		if ( isset( $cache[ $file ] ) ) {
@@ -523,7 +607,7 @@ class Rewriter {
 		);
 	}
 
-	public static function delivery_url_for_src( $src, $width, $hero = false ) {
+	public static function delivery_url_for_src( $src, $width, $hero = false, $declared = null ) {
 		$file = self::uploads_file( $src );
 		if ( null === $file ) {
 			return null;
@@ -538,7 +622,7 @@ class Rewriter {
 			return null;
 		}
 
-		$bytes = filesize( $file );
+		$bytes = null !== $declared ? (int) $declared : filesize( $file );
 
 		return Signer::build_url(
 			Settings_Store::cdn_host(),
@@ -560,6 +644,9 @@ class Rewriter {
 			return null;
 		}
 		$file = self::source_file( $shown );
+		if ( ! self::is_transformable( $file ) ) {
+			return null;
+		}
 		if ( isset( $memo[ $file ] ) ) {
 			return $memo[ $file ];
 		}
@@ -650,6 +737,9 @@ class Rewriter {
 	public static function origin_for( $attachment_id ) {
 		$origin = wp_get_attachment_url( $attachment_id );
 		if ( ! is_string( $origin ) || '' === $origin ) {
+			return null;
+		}
+		if ( ! self::is_transformable( $origin ) ) {
 			return null;
 		}
 		$file  = get_attached_file( $attachment_id );

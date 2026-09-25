@@ -666,6 +666,9 @@ class Probe {
 			if ( false === strpos( $url, $host ) || isset( $found[ $url ] ) ) {
 				continue;
 			}
+			if ( ! Rewriter::is_transformable( self::origin_of_delivery( $url ) ) ) {
+				continue;
+			}
 
 			$baseline = self::baseline_url( $tag, $url );
 			if ( null === $baseline ) {
@@ -693,10 +696,12 @@ class Probe {
 			if ( ! preg_match( '/\bsrc=["\']([^"\']+)["\']/i', $tag, $s ) ) {
 				continue;
 			}
-			$url     = html_entity_decode( $s[1], ENT_QUOTES );
-			$is_ours = ( '' !== $host && false !== strpos( $url, $host ) )
-				|| ( '' !== $base && false !== strpos( preg_replace( '#^https?://(www\.)?#i', '', $url ), $base ) );
-			if ( ! $is_ours ) {
+			$url      = html_entity_decode( $s[1], ENT_QUOTES );
+			$delivery = '' !== $host && false !== strpos( $url, $host );
+			$is_ours  = $delivery
+				|| ( '' !== $base && false !== strpos( preg_replace( '#^https?://(www\.)?#i', '', $url ), $base ) )
+				|| null !== Rewriter::original_of_derivative( $url );
+			if ( ! $is_ours || ! Rewriter::is_transformable( $delivery ? self::origin_of_delivery( $url ) : $url ) ) {
 				continue;
 			}
 			$seen[ $url ] = true;
@@ -705,6 +710,11 @@ class Probe {
 			}
 		}
 		return count( $seen );
+	}
+
+	private static function origin_of_delivery( $url ) {
+		$parts = explode( '/', (string) wp_parse_url( $url, PHP_URL_PATH ) );
+		return rawurldecode( (string) end( $parts ) );
 	}
 
 	private static function baseline_url( $tag, $url ) {
