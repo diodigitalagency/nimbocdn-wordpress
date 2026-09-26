@@ -189,7 +189,7 @@ class Rewriter {
 		if ( ! is_string( $html ) || '' === $html ) {
 			return is_string( $html ) ? $html : '';
 		}
-		if ( false === stripos( $html, '<img' ) && false === stripos( $html, 'url(' ) && false === stripos( $html, '<a ' ) && false === stripos( $html, '<picture' ) ) {
+		if ( false === stripos( $html, '<img' ) && false === stripos( $html, 'url(' ) && false === stripos( $html, '<a ' ) && false === stripos( $html, '<picture' ) && false === stripos( $html, 'data-thumbnail' ) ) {
 			return $html;
 		}
 		if ( false === stripos( $html, '<picture' ) ) {
@@ -217,7 +217,7 @@ class Rewriter {
 	private static function rewrite_anchors_and_backgrounds( $filtered ) {
 
 		$anchors = preg_replace_callback(
-			'/<a\b([^>]*?)\shref=(["\'])(https?:\/\/[^"\']+?\.(?:jpe?g|png|gif|webp)(?:\?[^"\']*)?)\2([^>]*)>(\s*<img\b)/i',
+			'/<a\b([^>]*?)\shref=(["\'])(https?:\/\/[^"\']+?\.(?:jpe?g|png|gif|webp)(?:\?[^"\']*)?)\2([^>]*)>(\s*<(?:img\b|div\b[^>]*\se-gallery-image\b|div\b[^>]*["\']e-gallery-image\b))/i',
 			array( __CLASS__, 'rewrite_anchor' ),
 			$filtered
 		);
@@ -232,7 +232,88 @@ class Rewriter {
 				$out = $backgrounds;
 			}
 		}
+
+		if ( false !== stripos( $out, 'data-thumbnail' ) ) {
+			$galleries = preg_replace_callback( self::GALLERY_TAG, array( __CLASS__, 'rewrite_gallery_tag' ), $out );
+			if ( is_string( $galleries ) ) {
+				$out = $galleries;
+			}
+		}
 		return $out;
+	}
+
+	const GALLERY_TAG = '/<[a-z][a-z0-9]*\b[^>]*\sdata-thumbnail=(["\'])[^"\']*\1[^>]*>/i';
+
+	private static function rewrite_gallery_tag( $matches ) {
+		$tag   = $matches[0];
+		$value = self::gallery_thumbnail( $tag );
+		if ( null === $value ) {
+			return $tag;
+		}
+		$width = preg_match( '/\sdata-width=["\']?(\d+)/i', $tag, $w ) ? (int) $w[1] : 0;
+		$url   = self::delivery_url_or_derivative( $value, $width > 0 ? $width : Signer::MAX_OFFERED_WIDTH );
+		if ( null === $url ) {
+			return $tag;
+		}
+		$out = preg_replace( '/\sdata-thumbnail=(["\'])[^"\']*\1/i', ' data-thumbnail="' . esc_url( $url ) . '"', $tag, 1 );
+		return is_string( $out ) ? $out : $tag;
+	}
+
+	private static function gallery_thumbnail( $tag ) {
+		if ( ! preg_match( '/\sclass=(["\'])(?:[^"\']*\s)?e-gallery-image(?:\s[^"\']*)?\1/i', $tag ) ) {
+			return null;
+		}
+		if ( ! preg_match( '/\sdata-thumbnail=(["\'])(.*?)\1/i', $tag, $t ) ) {
+			return null;
+		}
+		$value = html_entity_decode( $t[2], ENT_QUOTES );
+		if ( '' === $value || false !== strpos( $value, self::MARKER ) ) {
+			return null;
+		}
+		$shown = self::uploads_file( $value );
+		if ( null === $shown ) {
+			$original = self::original_of_derivative( $value );
+			$shown    = null === $original ? null : self::uploads_file( $original );
+		}
+		if ( null === $shown || ! self::same_proportions( $shown, self::source_file( $shown ) ) ) {
+			return null;
+		}
+		return $value;
+	}
+
+	public static function gallery_thumbnails( $html ) {
+		$urls = array();
+		if ( false === stripos( (string) $html, 'data-thumbnail' ) || ! preg_match_all( self::GALLERY_TAG, (string) $html, $m ) ) {
+			return $urls;
+		}
+		foreach ( $m[0] as $tag ) {
+			$value = self::gallery_thumbnail( $tag );
+			if ( null !== $value ) {
+				$urls[] = $value;
+			}
+		}
+		return $urls;
+	}
+
+	private static function same_proportions( $shown, $source ) {
+		if ( $shown === $source ) {
+			return true;
+		}
+		$a = self::image_dimensions( $shown );
+		$b = self::image_dimensions( $source );
+		if ( null === $a || null === $b ) {
+			return false;
+		}
+		return abs( $a[1] - $a[0] * $b[1] / $b[0] ) <= 1;
+	}
+
+	private static function image_dimensions( $file ) {
+		static $cache = array();
+		if ( ! array_key_exists( $file, $cache ) ) {
+			$size           = @getimagesize( $file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			$cache[ $file ] = ( is_array( $size ) && $size[0] > 0 && $size[1] > 0 ) ? array( (int) $size[0], (int) $size[1] ) : null;
+		}
+		return $cache[ $file ];
 	}
 
 	private static function background_patterns() {

@@ -3,6 +3,9 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 1.0.3
+* Elementor galleries: photos in the Gallery widget, and in galleries built on it such as CMSMasters', are now delivered through NimboCDN, and so is the large image the lightbox opens when a visitor clicks one. These galleries do not use image tags: each photo is a background that Elementor's script paints from a `data-thumbnail` address, and the plugin did not read it. Measured on 25 September 2026: all 6 gallery photos on one site's home page, and their lightbox links, came from its own server. A thumbnail cropped to a different shape than the original stays as it is, so the gallery layout does not change. On the free plan, gallery photos on the home page are now included.
+
 ## 1.0.2
 * Sites running Elementor on WordPress 6.9 or later: images are delivered through NimboCDN in full again. Elementor switches off the page buffer that WordPress 6.9 introduced, and the plugin relied on it, so only each image's main address was rewritten: the responsive sizes that browsers actually download (`srcset`), theme images, lazy-loaded images, backgrounds and lightbox links stayed on your server. Measured on 25 September 2026: 24 of 24 home page images on one site. The plugin now opens its own buffer when WordPress does not start one, never both, and leaves Elementor's editor preview as it was.
 

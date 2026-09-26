@@ -76,7 +76,7 @@ class Home {
 	}
 
 	public static function discover( $html ) {
-		$backgrounds = Rewriter::background_urls( $html );
+		$backgrounds = array_merge( Rewriter::background_urls( $html ), Rewriter::gallery_thumbnails( $html ) );
 		if ( ! preg_match_all( '/<img\b[^>]*>/i', $html, $tags ) && empty( $backgrounds ) ) {
 			return array();
 		}
