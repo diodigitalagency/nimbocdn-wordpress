@@ -3,6 +3,9 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 1.0.4
+* Photos whose reduced "-scaled" copy is missing from the server are now delivered from the original upload. WordPress records that copy of a large photo as the image's main file; when it has been deleted but the original is still there, as can happen after regenerating thumbnails or running an optimizer, the plugin pointed to the missing file, the CDN could not fetch it, and the photo reached visitors late through the fallback. Measured on 26 September 2026: 24 of 10,484 images on one store, each taking 3.5 to 4.2 seconds instead of under 0.2. Nothing else changes: images whose files are present, stored on another server, or missing altogether are handled exactly as before.
+
 ## 1.0.3
 * Elementor galleries: photos in the Gallery widget, and in galleries built on it such as CMSMasters', are now delivered through NimboCDN, and so is the large image the lightbox opens when a visitor clicks one. These galleries do not use image tags: each photo is a background that Elementor's script paints from a `data-thumbnail` address, and the plugin did not read it. Measured on 25 September 2026: all 6 gallery photos on one site's home page, and their lightbox links, came from its own server. A thumbnail cropped to a different shape than the original stays as it is, so the gallery layout does not change. On the free plan, gallery photos on the home page are now included.
 

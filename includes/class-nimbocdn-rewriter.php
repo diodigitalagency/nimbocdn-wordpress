@@ -863,8 +863,16 @@ class Rewriter {
 		if ( ! self::is_transformable( $origin ) ) {
 			return null;
 		}
-		$file  = get_attached_file( $attachment_id );
-		$stamp = is_string( $file ) && '' !== $file && is_file( $file ) ? filemtime( $file ) : false;
+		$file   = get_attached_file( $attachment_id );
+		$exists = is_string( $file ) && '' !== $file && is_file( $file );
+		if ( ! $exists && is_string( $file ) ) {
+			$original = self::original_behind_missing_scaled( $file, $origin );
+			if ( null !== $original ) {
+				list( $file, $origin ) = $original;
+				$exists                = true;
+			}
+		}
+		$stamp = $exists ? filemtime( $file ) : false;
 		if ( ! $stamp ) {
 			$modified = get_post_field( 'post_modified_gmt', $attachment_id, 'raw' );
 			$stamp    = is_string( $modified ) ? strtotime( $modified . ' UTC' ) : false;
@@ -873,6 +881,22 @@ class Rewriter {
 			return $origin;
 		}
 		return add_query_arg( 'v', base_convert( (string) $stamp, 10, 36 ), $origin );
+	}
+
+	private static function original_behind_missing_scaled( $file, $origin ) {
+		if ( ! preg_match( '/-scaled(?=\.[a-z0-9]{2,5}$)/i', $file ) ) {
+			return null;
+		}
+		$uploads = wp_upload_dir();
+		if ( empty( $uploads['basedir'] ) || 0 !== strpos( $file, trailingslashit( $uploads['basedir'] ) ) ) {
+			return null;
+		}
+		$bare = preg_replace( '/-scaled(?=\.[a-z0-9]{2,5}$)/i', '', $file, 1 );
+		$name = wp_basename( $file );
+		if ( ! is_string( $bare ) || ! is_file( $bare ) || substr( $origin, -strlen( $name ) ) !== $name ) {
+			return null;
+		}
+		return array( $bare, substr( $origin, 0, -strlen( $name ) ) . wp_basename( $bare ) );
 	}
 
 	private static function wordpress_bytes( $attachment_id, $width ) {
