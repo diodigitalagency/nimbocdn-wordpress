@@ -8,7 +8,7 @@ class Rewriter {
 
 	const MARKER = '/i/';
 
-	const TRANSFORMABLE = '/\.(?:jpe?g|jpe|png|gif|webp|avif)$/i';
+	const TRANSFORMABLE = '/\.(?:jpe?g|jpe|png|gif|webp)$/i';
 
 	public static function is_transformable( $url ) {
 		$path = wp_parse_url( (string) $url, PHP_URL_PATH );

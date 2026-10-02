@@ -3,6 +3,9 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 1.0.7
+* Images uploaded in AVIF format are now delivered straight from your site instead of taking a detour through the image service, which cannot read AVIF as a source on our plan and sent every visitor back to your server. Measured on 2 October 2026: one AVIF photo on a store's home page failed on all 56 requests in a day. An AVIF original is already the lightest format, so nothing is lost; JPEG, PNG, GIF and WebP images are optimized as before.
+
 ## 1.0.6
 * Sites behind Cloudflare's Bot Fight Mode now get their home page measured and its images optimized. Bot Fight Mode challenges the site's own server when it opens its home page, so the plugin could neither measure it nor tell the service which images it has, and on the free plan no image was delivered. Measured on 2 October 2026 on a store with Bot Fight Mode on. When that challenge appears, the plugin now asks the site's own server directly for the same page, as WordPress does for its own health checks. Sites without the challenge make exactly the same request as before.
 * An error page is no longer read as a home page without images: the list of optimized images stays as it was, and the screen says what blocked it.
