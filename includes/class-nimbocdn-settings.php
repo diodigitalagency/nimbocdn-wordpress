@@ -1943,6 +1943,9 @@ JS;
 				: __( 'Your store keeps working and every image loads — WordPress is delivering the originals.', 'nimbocdn' );
 		}
 		if ( 'error' === $probe['state'] ) {
+			if ( 'blocked' === $probe['detail'] ) {
+				return __( 'A firewall, such as Cloudflare\'s Bot Fight Mode, blocks your server from opening its own home page, even when it connects directly. Without that page the home page cannot be measured and, on the free plan, its images cannot be listed for optimization. Write to hello@nimbocdn.net and we will help you.', 'nimbocdn' );
+			}
 			if ( 'http_request_failed' === $probe['detail'] ) {
 				return __( 'Your site could not reach itself to be measured, which happens on hosting with few PHP workers. Your images are not affected — only this measurement. Try again in a moment, or wait for the scheduled check.', 'nimbocdn' );
 			}

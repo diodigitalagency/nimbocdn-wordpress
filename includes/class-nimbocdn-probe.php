@@ -166,7 +166,7 @@ class Probe {
 		}
 
 		self::progress( 0, 0, 0, $job['synced'] ? 'page_again' : 'page' );
-		$page = wp_remote_get(
+		$page = self::fetch_own(
 			add_query_arg( 'nimbocdn-probe', (string) time(), home_url( '/' ) ),
 			array(
 				'timeout'     => min( self::TIMEOUT, max( 1, (int) floor( $left - 1 ) ) ),
@@ -178,6 +178,14 @@ class Probe {
 				array(
 					'state'  => 'error',
 					'detail' => $page->get_error_code(),
+				)
+			);
+		}
+		if ( self::challenged( $page ) ) {
+			return self::finish_with(
+				array(
+					'state'  => 'error',
+					'detail' => 'blocked',
 				)
 			);
 		}
@@ -347,6 +355,57 @@ class Probe {
 		}
 
 		return self::finish( $job );
+	}
+
+	public static function fetch_own( $url, array $args ) {
+		$response = wp_remote_get( $url, $args );
+		if ( ! self::challenged( $response ) ) {
+			return $response;
+		}
+		$parts = wp_parse_url( $url );
+		if ( empty( $parts['host'] ) ) {
+			return $response;
+		}
+		$port = ! empty( $parts['port'] ) ? (int) $parts['port'] : ( isset( $parts['scheme'] ) && 'http' === $parts['scheme'] ? 80 : 443 );
+		$args = array_merge(
+			$args,
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- core filter, the one WordPress applies to its own loopbacks.
+			array( 'sslverify' => apply_filters( 'https_local_ssl_verify', false ) )
+		);
+		foreach ( self::origin_addresses() as $ip ) {
+			$pin = static function ( $handle ) use ( $parts, $port, $ip ) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt -- `http_api_curl` hands over the handle precisely for options the HTTP API does not expose; this one only pins the site's own host to its own server.
+				curl_setopt( $handle, CURLOPT_RESOLVE, array( $parts['host'] . ':' . $port . ':' . $ip ) );
+			};
+			add_action( 'http_api_curl', $pin );
+			$direct = wp_remote_get( $url, $args );
+			remove_action( 'http_api_curl', $pin );
+			if ( ! is_wp_error( $direct ) && 200 === (int) wp_remote_retrieve_response_code( $direct ) ) {
+				return $direct;
+			}
+		}
+		return $response;
+	}
+
+	public static function challenged( $response ) {
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+		$code = (int) wp_remote_retrieve_response_code( $response );
+		if ( 403 !== $code && 503 !== $code ) {
+			return false;
+		}
+		return '' !== (string) wp_remote_retrieve_header( $response, 'cf-mitigated' )
+			|| false !== stripos( (string) wp_remote_retrieve_header( $response, 'server' ), 'cloudflare' );
+	}
+
+	private static function origin_addresses() {
+		$addresses    = array( '127.0.0.1' );
+		$server = isset( $_SERVER['SERVER_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_ADDR'] ) ) : '';
+		if ( false !== filter_var( $server, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) && '127.0.0.1' !== $server ) {
+			$addresses[] = $server;
+		}
+		return $addresses;
 	}
 
 	private static function finish_with( array $partial ) {

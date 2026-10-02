@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -265,6 +265,10 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 
 == Changelog ==
 
+= 1.0.6 =
+* Sites behind Cloudflare's Bot Fight Mode now get their home page measured and its images optimized. Bot Fight Mode challenges the site's own server when it opens its home page, so the plugin could neither measure it nor tell the service which images it has, and on the free plan no image was delivered. Measured on 2 October 2026 on a store with Bot Fight Mode on. When that challenge appears, the plugin now asks the site's own server directly for the same page, as WordPress does for its own health checks. Sites without the challenge make exactly the same request as before.
+* An error page is no longer read as a home page without images: the list of optimized images stays as it was, and the screen says what blocked it.
+
 = 1.0.5 =
 * Activating the plugin from the "More details" window of Plugins → Add New now takes you to the NimboCDN screen and connects the site. That window activates without reloading the page, and the connection waited for the twice-daily check: up to 12 hours with the plugin doing nothing. Measured on WordPress 7.1. Activating from the plugin card or the Plugins list works as before.
 * While the site is not connected to the service, a notice in the admin says so and links to the NimboCDN screen. That screen now shows only the reason and the button that finishes the activation, instead of a Pause button and settings that could not do anything yet.
@@ -375,6 +379,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.6 =
+Sites behind Cloudflare's Bot Fight Mode now get their home page measured and its images optimized. Update at any time.
 
 = 1.0.5 =
 Activating from the "More details" window now connects the site right away, and a site that could not connect says so and explains what to allow in its firewall. Update at any time.

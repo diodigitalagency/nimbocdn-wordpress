@@ -61,14 +61,14 @@ class Home {
 		if ( self::serves_everything() ) {
 			return;
 		}
-		$page = wp_remote_get(
+		$page = Probe::fetch_own(
 			home_url( '/' ),
 			array(
 				'timeout'     => Probe::TIMEOUT,
 				'redirection' => 2,
 			)
 		);
-		if ( is_wp_error( $page ) ) {
+		if ( is_wp_error( $page ) || 200 !== (int) wp_remote_retrieve_response_code( $page ) ) {
 			return;
 		}
 		$html = (string) wp_remote_retrieve_body( $page );
