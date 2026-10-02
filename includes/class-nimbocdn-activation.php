@@ -28,7 +28,7 @@ class Activation {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- only read to tell a bulk activation apart; it changes nothing.
 		if ( ! $network_wide && ! isset( $_REQUEST['activate-multi'] ) ) {
-			set_transient( 'nimbocdn_activated', get_current_user_id(), MINUTE_IN_SECONDS );
+			set_transient( 'nimbocdn_activated', get_current_user_id(), 10 * MINUTE_IN_SECONDS );
 		}
 	}
 

@@ -219,6 +219,11 @@ class Settings_Store {
 		return $account;
 	}
 
+	public static function is_registered() {
+		$c = self::credentials();
+		return '' !== $c['tenant_id'] && '' !== $c['license_key'];
+	}
+
 	public static function is_configured() {
 		$c = self::credentials();
 		return '' !== $c['tenant_id'] && '' !== $c['license_key'] && '' !== $c['domain']

@@ -27,9 +27,29 @@ class Settings {
 		add_action( 'wp_ajax_nimbocdn_refresh', array( __CLASS__, 'ajax_refresh' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'dunning_notice' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'unfinished_activation_notice' ) );
 		add_action( 'wp_ajax_nimbocdn_dismiss_dunning', array( __CLASS__, 'ajax_dismiss_dunning' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( NIMBOCDN_FILE ), array( __CLASS__, 'action_links' ) );
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'row_meta' ), 10, 2 );
+	}
+
+	public static function unfinished_activation_notice() {
+		if ( ! current_user_can( 'manage_options' ) || Settings_Store::is_registered() ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( $screen && 'settings_page_' . self::PAGE_SLUG === $screen->id ) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-warning is-dismissible nimbocdn-activation-notice"><p><b>%s</b> %s</p><p><a class="button button-primary" href="%s">%s</a></p></div>',
+			esc_html__( 'NimboCDN: activation is not finished.', 'nimbocdn' ),
+			esc_html__( 'To finish it, go to Settings → NimboCDN.', 'nimbocdn' ),
+			esc_url( self::page_url() ),
+			esc_html__( 'Finish activation', 'nimbocdn' )
+		);
 	}
 
 	const DISMISS_META = 'nimbocdn_dunning_dismissed';
@@ -255,13 +275,16 @@ class Settings {
 	}
 
 	public static function redirect_after_activation() {
+		if ( wp_doing_ajax() ) {
+			return;
+		}
 		$user = get_transient( 'nimbocdn_activated' );
 		if ( false === $user || get_current_user_id() !== (int) $user ) {
 			return;
 		}
 		delete_transient( 'nimbocdn_activated' );
 
-		if ( wp_doing_ajax() || ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
@@ -502,6 +525,9 @@ class Settings {
 
 	public static function handle_toggle() {
 		self::guard();
+		if ( ! Settings_Store::is_registered() ) {
+			self::back();
+		}
 
 		$paused = Settings_Store::is_paused();
 		update_option( 'nimbocdn_paused', ! $paused, false );
@@ -565,9 +591,13 @@ class Settings {
 			return;
 		}
 		printf(
-			'<div class="notice notice-warning"><p><strong>%s</strong> %s</p></div>',
+			'<div class="notice notice-warning"><p><strong>%s</strong> %s</p><p>%s</p></div>',
 			esc_html__( 'Domain not verified yet.', 'nimbocdn' ),
-			esc_html__( 'Your images are being optimized on the free plan all the same. Upgrading to Pro and managing billing stay locked until the service confirms this site is yours. It checks by itself, with nothing for you to do, and retries automatically twice a day.', 'nimbocdn' )
+			esc_html__( 'The service could not confirm that this site is yours, so upgrading to the Pro plan and managing billing stay locked. It retries by itself twice a day; press Measure now to try again right away.', 'nimbocdn' ),
+			wp_kses(
+				__( 'Usually a firewall (Cloudflare, Wordfence, Sucuri or your hosting\'s) is blocking the check, and while it does, your images are not optimized either. In your firewall, exclude <strong>/wp-content/uploads/</strong> from country blocks and bot challenges (captcha, JS challenge). Those are public files your visitors already download, and the rest of your site stays protected.', 'nimbocdn' ),
+				array( 'strong' => array() )
+			)
 		);
 	}
 
@@ -687,6 +717,11 @@ class Settings {
 		}
 		$busy        = $pending || Probe::in_flight();
 		$has_traffic = '' !== $traffic['updated_at'] && (int) $traffic['last_30d']['requests'] > 0;
+
+		if ( ! Settings_Store::is_registered() ) {
+			self::render_unfinished( $busy );
+			return $busy;
+		}
 		?>
 			<div class="nimbo-card nimbo-hero-card<?php echo $paused ? ' nimbo-paused' : ''; ?>">
 				<div class="nimbo-head">
@@ -768,6 +803,45 @@ class Settings {
 			<?php self::render_technical(); ?>
 		<?php
 		return $busy;
+	}
+
+	private static function render_unfinished( $busy ) {
+		?>
+		<div class="nimbo-card">
+			<div class="nimbo-head">
+				<p class="nimbo-title"><?php esc_html_e( 'Activation not finished', 'nimbocdn' ); ?></p>
+			</div>
+			<?php if ( $busy ) : ?>
+				<p><span class="nimbo-spin" aria-hidden="true"></span> <?php esc_html_e( 'Connecting this site to NimboCDN…', 'nimbocdn' ); ?></p>
+			<?php else : ?>
+				<p>
+					<?php
+					$why = (string) get_option( 'nimbocdn_activation_error', '' );
+					if ( 'not-verified' === $why ) {
+						esc_html_e( 'This domain is already connected to NimboCDN, and the service could not confirm yet that this site is yours. Press Finish activation to try again. Sites behind a password or on localhost cannot be verified.', 'nimbocdn' );
+					} elseif ( 'rate-limited' === $why ) {
+						esc_html_e( 'Too many activation attempts for this domain. Wait an hour and press Finish activation.', 'nimbocdn' );
+					} else {
+						esc_html_e( 'This site could not connect to NimboCDN yet. Nothing changed on your site. Press Finish activation to try again.', 'nimbocdn' );
+					}
+					?>
+				</p>
+				<?php
+				$left = self::cooldown_left();
+				if ( $left > 0 ) {
+					printf(
+						'<span class="nimbo-action"><button type="button" class="button nimbo-cooldown" disabled data-cooldown="%d">%s</button></span>',
+						(int) $left,
+						/* translators: %s: seconds */
+						esc_html( sprintf( __( 'Wait %ss', 'nimbocdn' ), number_format_i18n( $left ) ) )
+					);
+				} else {
+					self::action_button( 'nimbocdn_recheck', __( 'Finish activation', 'nimbocdn' ), 'button-primary' );
+				}
+				?>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 
 	private static function render_why( array $probe, array $account ) {
@@ -861,7 +935,9 @@ class Settings {
 				<?php endif; ?>
 				<div class="nimbo-why-row">
 					<?php self::why_safe(); ?>
-					<a href="#nimbocdn-plan"><?php esc_html_e( 'See Pro ↓', 'nimbocdn' ); ?></a>
+					<?php if ( Settings_Store::is_registered() ) :?>
+						<a href="#nimbocdn-plan"><?php esc_html_e( 'See Pro ↓', 'nimbocdn' ); ?></a>
+					<?php endif; ?>
 				</div>
 			</div>
 			<?php endif; ?>

@@ -3,6 +3,11 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 1.0.5
+* Activating the plugin from the "More details" window of Plugins → Add New now takes you to the NimboCDN screen and connects the site. That window activates without reloading the page, and the connection waited for the twice-daily check: up to 12 hours with the plugin doing nothing. Measured on WordPress 7.1. Activating from the plugin card or the Plugins list works as before.
+* While the site is not connected to the service, a notice in the admin says so and links to the NimboCDN screen. That screen now shows only the reason and the button that finishes the activation, instead of a Pause button and settings that could not do anything yet.
+* When the service cannot confirm that the site is yours, the screen now says what usually causes it, a firewall, and what to allow: /wp-content/uploads/, without country blocks or bot challenges. It no longer says the images are optimized all the same, because a firewall that blocks the check blocks the images too.
+
 ## 1.0.4
 * Photos whose reduced "-scaled" copy is missing from the server are now delivered from the original upload. WordPress records that copy of a large photo as the image's main file; when it has been deleted but the original is still there, as can happen after regenerating thumbnails or running an optimizer, the plugin pointed to the missing file, the CDN could not fetch it, and the photo reached visitors late through the fallback. Measured on 26 September 2026: 24 of 10,484 images on one store, each taking 3.5 to 4.2 seconds instead of under 0.2. Nothing else changes: images whose files are present, stored on another server, or missing altogether are handled exactly as before.
 
