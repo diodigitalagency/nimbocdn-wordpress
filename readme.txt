@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -220,7 +220,7 @@ It should not. The plugin only rewrites image attributes, and cached HTML contai
 
 = Does it add JavaScript or CSS to my pages? =
 
-No CSS. On pages with images delivered by NimboCDN it adds one small inline script, about 2.5 KB, at the top of the page. While your images arrive normally it changes nothing. If a visitor's network cannot reach ours — some internet providers block Cloudflare addresses during football broadcasts — it loads that visitor's images from your own server within about two seconds, and at once on the pages they open next, for an hour. It never loads lazy images early and sends nothing about the visitor. Developers can switch it off with the `nimbocdn_hang_watchdog` filter. The settings screen has its own script, on that screen only.
+No CSS. On pages with images delivered by NimboCDN it adds one small inline script, about 2.6 KB, at the top of the page. While your images arrive normally it changes nothing. If a visitor's network cannot reach ours — some internet providers block Cloudflare addresses during football broadcasts — it loads that visitor's images from your own server within about two seconds, and at once on the pages they open next, for an hour. It never loads lazy images early and sends nothing about the visitor. Developers can switch it off with the `nimbocdn_hang_watchdog` filter. The settings screen has its own script, on that screen only.
 
 = What happens if I deactivate or uninstall it? =
 
@@ -264,6 +264,10 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 6. The free plan: your home page optimized forever, and it says plainly which images WordPress is still serving.
 
 == Changelog ==
+
+= 1.0.9 =
+* When a visitor's network cannot reach the image network, every photo now comes from your own server, including the ones that had no fallback of their own. Some page builders, Elementor among them, output images without the fallback the plugin adds, and those photos stayed blank. Found on 11 October 2026 on a store's home page during a football-broadcast block: 9 of 25 photos, the main one among them, never appeared. Measured in Chrome with that connection simulated: all of them now arrive from your server 2.4 seconds after the page, and about 0.2 seconds after it on the next page. Those photos load at their original size, since it is the only copy at hand; while your images arrive normally nothing changes on the page.
+* A photo without that fallback that fails to load from the image network now loads from your own server instead of staying broken.
 
 = 1.0.8 =
 * Pausing or resuming optimization now empties your page cache — WP Rocket, LiteSpeed Cache, W3 Total Cache and the others the plugin already empties when its licence changes — so the switch reaches every page at once. Found on 10 October 2026 on a store whose WP Rocket keeps pages for 10 hours: after pausing, the cached pages kept loading every photo from the image network until they expired.
@@ -388,6 +392,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.9 =
+When a visitor's network cannot reach the image network, photos that page builders output without a fallback now come from your own server too, instead of staying blank. Update at any time.
 
 = 1.0.8 =
 Pausing, deactivating or deleting now reaches cached pages at once, and visitors whose network cannot reach the image network get your own images in about two seconds instead of 15 to 20 seconds per image. Update at any time.
