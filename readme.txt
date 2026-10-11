@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,7 +88,7 @@ It works just as well on a blog, a portfolio or a company site, and is at its mo
 * **Caching plugins.** The plugin only rewrites image attributes, and cached HTML stays valid: old delivery hostnames keep working indefinitely, by design.
 * **Page builders and themes.** Elementor, Divi, Gutenberg blocks, galleries and sliders all produce the same HTML, which is where the plugin works.
 * **Existing WebP plugins.** If another plugin wraps your images in a `<picture>` block with its own WebP copies, NimboCDN finds the original behind it and serves that.
-* **Lazy loading.** No JavaScript is added to your pages, and your theme's lazy loading is untouched.
+* **Lazy loading.** Your theme's lazy loading is untouched.
 
 = 🛡️ If anything goes wrong =
 
@@ -96,7 +96,7 @@ Three independent fallbacks, each ending with the visitor seeing your image:
 
 1. If the service stops responding, the plugin stops rewriting URLs and WordPress serves its own images.
 2. If a single image cannot be processed, the edge redirects to your original.
-3. If even that fails, the `<img>` element falls back to the file WordPress would have served.
+3. If even that fails, or a visitor's network cannot reach ours, the `<img>` element falls back to the file WordPress would have served.
 
 The plugin makes no network call during a page view, so it cannot become a single point of failure.
 
@@ -120,7 +120,7 @@ This plugin is a connector for **NimboCDN**, a hosted image delivery service ope
 
 **Health, account and home-page sync — from the background and from the settings screen.** Twice a day by WP-Cron, when you press *Measure now* (at most once a minute), when you open or return to the settings screen, and when your home page changes, the plugin sends your site identifier to `/health`, `/account` and `/site/home` on the same host. The last one carries the list of image files your home page uses and the HTML of your home page as your own server returns it, so the service can verify them — by visiting your home page, or, when a firewall or antibots blocks that visit, against the HTML the plugin sent — and answer which ones it will serve. The response says whether the service is available, which delivery hostname to use, your plan and allowance, and the delivery statistics shown on the settings screen. No visitor data and nothing about your posts other than your public home page is sent.
 
-**Image delivery — when a visitor loads a page.** The visitor's browser requests images from the delivery hostname (currently `cdn.nimbocdn.net`). That request carries the URL of the original image, the size of the file WordPress would otherwise have served, and the browser's own `Accept` header, as any image request does. For each image served, the edge records the delivered size, format and cache state against your site identifier — sampled on busy sites — never the visitor's IP address, user agent or page. When a request is refused (for example, a signature that does not match), the edge also records the URL of the refused original so the refusal can be investigated; that URL is a file path on your own site. The plugin itself makes no network call during a page view.
+**Image delivery — when a visitor loads a page.** The visitor's browser requests images from the delivery hostname (currently `cdn.nimbocdn.net`). That request carries the URL of the original image, the size of the file WordPress would otherwise have served, and the browser's own `Accept` header, as any image request does. For each image served, the edge records the delivered size, format and cache state against your site identifier — sampled on busy sites — never the visitor's IP address, user agent or page. When a request is refused (for example, a signature that does not match), the edge also records the URL of the refused original so the refusal can be investigated; that URL is a file path on your own site. The plugin itself makes no network call during a page view. To notice when a visitor cannot reach the delivery hostname, the page asks `https://<delivery host>/?nimbocdn-ping=<time>` at most once an hour, without cookies, and keeps the answer in that browser for an hour.
 
 **Network card — when you open the settings screen.** Your browser asks `https://<delivery host>/whoami` four times: the first request only opens the connection, the next three are timed and the fastest is shown. A failed request is retried once. The answer names the data center that served the request and the approximate city of your own IP address, so the screen can show where your images are delivered from, and in how many milliseconds, for that computer. Nothing is stored.
 
@@ -220,7 +220,7 @@ It should not. The plugin only rewrites image attributes, and cached HTML contai
 
 = Does it add JavaScript or CSS to my pages? =
 
-No. On the front end the plugin changes image attributes and nothing else. The only script it loads is on its own settings screen.
+No CSS. On pages with images delivered by NimboCDN it adds one small inline script, about 2.5 KB, at the top of the page. While your images arrive normally it changes nothing. If a visitor's network cannot reach ours — some internet providers block Cloudflare addresses during football broadcasts — it loads that visitor's images from your own server within about two seconds, and at once on the pages they open next, for an hour. It never loads lazy images early and sends nothing about the visitor. Developers can switch it off with the `nimbocdn_hang_watchdog` filter. The settings screen has its own script, on that screen only.
 
 = What happens if I deactivate or uninstall it? =
 
@@ -228,7 +228,7 @@ Your site immediately serves its own images again — they were never altered. U
 
 = What if the service goes down? =
 
-Your site keeps working with its own images, exactly as before. The plugin stops rewriting on its own after three failed checks and resumes when the service answers again. NimboCDN is not a single point of failure for your site.
+Your site keeps working with its own images, exactly as before. The plugin stops rewriting on its own after three failed checks and resumes when the service answers again. And when only one visitor cannot reach our network, that visitor's pages switch to your own images within about two seconds. NimboCDN is not a single point of failure for your site.
 
 = Does it work without WooCommerce? =
 
@@ -264,6 +264,12 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 6. The free plan: your home page optimized forever, and it says plainly which images WordPress is still serving.
 
 == Changelog ==
+
+= 1.0.8 =
+* Pausing or resuming optimization now empties your page cache — WP Rocket, LiteSpeed Cache, W3 Total Cache and the others the plugin already empties when its licence changes — so the switch reaches every page at once. Found on 10 October 2026 on a store whose WP Rocket keeps pages for 10 hours: after pausing, the cached pages kept loading every photo from the image network until they expired.
+* When a visitor's network cannot reach the image network, their images now come from your own server in about two seconds instead of 15 to 20 seconds per image, and at once on the pages they open in the next hour. Found on 10 October 2026 on a store in Spain, where an internet provider dropped all traffic to Cloudflare addresses for about eight hours during football broadcasts. Measured in Chrome with that connection simulated: 2.2 seconds after the page arrived on the first page, under 0.7 seconds on the next. A small inline script at the top of pages with optimized images does this; while your images arrive normally it changes nothing on the page and asks the image network at most once an hour per visitor. Developers can switch it off with the `nimbocdn_hang_watchdog` filter.
+* A photo inside a `<picture>` block now falls back to your own server when the image network answers with an error. Before, the browser picked the image network's copy again and the photo stayed broken.
+* Deactivating or deleting the plugin now empties your page cache too, so pages stop pointing at the image network right away instead of hours later. Updating the plugin still never empties it.
 
 = 1.0.7 =
 * Images uploaded in AVIF format are now delivered straight from your site instead of taking a detour through the image service, which cannot read AVIF as a source on our plan and sent every visitor back to your server. Measured on 2 October 2026: one AVIF photo on a store's home page failed on all 56 requests in a day. An AVIF original is already the lightest format, so nothing is lost; JPEG, PNG, GIF and WebP images are optimized as before.
@@ -382,6 +388,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.8 =
+Pausing, deactivating or deleting now reaches cached pages at once, and visitors whose network cannot reach the image network get your own images in about two seconds instead of 15 to 20 seconds per image. Update at any time.
 
 = 1.0.7 =
 Images uploaded as AVIF are now delivered straight from your site instead of failing through the image service. Update at any time.

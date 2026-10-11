@@ -3,6 +3,12 @@
 All notable changes to the NimboCDN WordPress plugin. This file is generated from the
 `== Changelog ==` section of `readme.txt`, the one published on WordPress.org.
 
+## 1.0.8
+* Pausing or resuming optimization now empties your page cache — WP Rocket, LiteSpeed Cache, W3 Total Cache and the others the plugin already empties when its licence changes — so the switch reaches every page at once. Found on 10 October 2026 on a store whose WP Rocket keeps pages for 10 hours: after pausing, the cached pages kept loading every photo from the image network until they expired.
+* When a visitor's network cannot reach the image network, their images now come from your own server in about two seconds instead of 15 to 20 seconds per image, and at once on the pages they open in the next hour. Found on 10 October 2026 on a store in Spain, where an internet provider dropped all traffic to Cloudflare addresses for about eight hours during football broadcasts. Measured in Chrome with that connection simulated: 2.2 seconds after the page arrived on the first page, under 0.7 seconds on the next. A small inline script at the top of pages with optimized images does this; while your images arrive normally it changes nothing on the page and asks the image network at most once an hour per visitor. Developers can switch it off with the `nimbocdn_hang_watchdog` filter.
+* A photo inside a `<picture>` block now falls back to your own server when the image network answers with an error. Before, the browser picked the image network's copy again and the photo stayed broken.
+* Deactivating or deleting the plugin now empties your page cache too, so pages stop pointing at the image network right away instead of hours later. Updating the plugin still never empties it.
+
 ## 1.0.7
 * Images uploaded in AVIF format are now delivered straight from your site instead of taking a detour through the image service, which cannot read AVIF as a source on our plan and sent every visitor back to your server. Measured on 2 October 2026: one AVIF photo on a store's home page failed on all 56 requests in a day. An AVIF original is already the lightest format, so nothing is lost; JPEG, PNG, GIF and WebP images are optimized as before.
 

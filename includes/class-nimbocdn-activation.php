@@ -219,5 +219,8 @@ class Activation {
 		wp_clear_scheduled_hook( Home::HOOK );
 		wp_clear_scheduled_hook( Challenge::SWEEP_HOOK );
 		Challenge::sweep();
+		if ( Settings_Store::is_registered() ) {
+			Page_Cache::purge();
+		}
 	}
 }

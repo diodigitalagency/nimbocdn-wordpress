@@ -8,17 +8,18 @@ class Page_Cache {
 
 	const OPTION = 'nimbocdn_page_cache_purge';
 
+	private static $done = false;
+
 	public static function purge() {
-		static $done = false;
-		if ( $done ) {
+		if ( self::$done ) {
 			return array();
 		}
 		if ( ! did_action( 'init' ) ) {
 			add_action( 'init', array( __CLASS__, 'purge' ), 99 );
 			return array();
 		}
-		$done    = true;
-		$reached = array();
+		self::$done = true;
+		$reached    = array();
 		foreach ( self::steps() as $name => $step ) {
 			try {
 				if ( $step() ) {

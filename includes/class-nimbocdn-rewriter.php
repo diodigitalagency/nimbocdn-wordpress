@@ -8,6 +8,16 @@ class Rewriter {
 
 	const MARKER = '/i/';
 
+	const WATCHDOG_PING_MS = 2000;
+
+	const WATCHDOG_WAIT_MS = 4000;
+
+	const WATCHDOG_MEMORY_MS = 3600000;
+
+	const WATCHDOG_ERRORS = 2;
+
+	const WATCHDOG_ID = 'nimbocdn-watchdog';
+
 	const TRANSFORMABLE = '/\.(?:jpe?g|jpe|png|gif|webp)$/i';
 
 	public static function is_transformable( $url ) {
@@ -171,10 +181,10 @@ class Rewriter {
 
 	public static function filter_output( $html ) {
 		if ( ! defined( 'NIMBOCDN_PROFILE' ) || ! NIMBOCDN_PROFILE ) {
-			return self::rewrite_html( $html );
+			return self::with_watchdog( self::rewrite_html( $html ) );
 		}
 		$t0  = microtime( true );
-		$out = self::rewrite_html( $html );
+		$out = self::with_watchdog( self::rewrite_html( $html ) );
 		if ( false !== stripos( $out, '</html>' ) ) {
 			$out .= sprintf(
 				"\n<!-- nimbocdn pass=%.1fms in=%d kB -->",
@@ -183,6 +193,87 @@ class Rewriter {
 			);
 		}
 		return $out;
+	}
+
+	private static function with_watchdog( $html ) {
+		if ( ! is_string( $html ) || false !== strpos( $html, 'id="' . self::WATCHDOG_ID . '"' ) ) {
+			return $html;
+		}
+		$at = self::watchdog_position( $html );
+		if ( null === $at ) {
+			return $html;
+		}
+		$host = Settings_Store::cdn_host();
+		if ( '' === $host || ! preg_match( '/<(?:img|source)\b[^>]*\/\/' . preg_quote( $host, '/' ) . '\//i', $html ) ) {
+			return $html;
+		}
+		if ( ! self::should_rewrite() || self::is_amp() || ! apply_filters( 'nimbocdn_hang_watchdog', true ) ) {
+			return $html;
+		}
+		$tag = wp_get_inline_script_tag(
+			self::watchdog_js( $host ),
+			array(
+				'id'                 => self::WATCHDOG_ID,
+				'data-cfasync'       => 'false',
+				'nowprocket'         => true,
+				'data-no-optimize'   => '1',
+				'data-no-defer'      => '1',
+				'data-noptimize'     => '1',
+				'data-jetpack-boost' => 'ignore',
+			)
+		);
+		return substr_replace( $html, $tag, $at, 0 );
+	}
+
+	private static function watchdog_position( $html ) {
+		if ( preg_match( '/<head\b[^>]*>/i', $html, $open, PREG_OFFSET_CAPTURE ) ) {
+			$start = $open[0][1] + strlen( $open[0][0] );
+			$close = stripos( $html, '</head>', $start );
+			$head  = substr( $html, $start, false === $close ? 2048 : $close - $start );
+			if ( preg_match( '/<meta\b[^>]*\bcharset\b[^>]*>/i', $head, $meta, PREG_OFFSET_CAPTURE ) ) {
+				return $start + $meta[0][1] + strlen( $meta[0][0] );
+			}
+			return $start;
+		}
+		$body = strripos( $html, '</body>' );
+		return false === $body ? null : $body;
+	}
+
+	private static function is_amp() {
+		if ( function_exists( 'amp_is_request' ) ) {
+			return (bool) amp_is_request();
+		}
+		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+	}
+
+	private static function watchdog_js( $host ) {
+		return '(function(w,d){try{'
+			. 'var Z=' . wp_json_encode( '//' . $host . '/', JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ) . ',K="nimbocdn",T=Date.now(),E=0,S,m,p;'
+			. 'try{S=w.localStorage;m=S.getItem(K)}catch(e){try{S=w.sessionStorage;m=S.getItem(K)}catch(e){S=0}}'
+			. 'if(!S||!w.AbortController||!w.MutationObserver)return;m=(m||"").split(":");'
+			. 'function c(u){return(u+"").indexOf(Z)>-1}'
+			. 'function x(i){return c(i.outerHTML+i.currentSrc)}'
+			. 'function k(){return[].some.call(d.images,function(i){return i.complete&&i.naturalWidth&&c(i.currentSrc)})}'
+			. 'function M(v){try{S.setItem(K,v+":"+(T+' . (int) self::WATCHDOG_MEMORY_MS . '))}catch(e){}}'
+			. 'function Q(i){var p=i.parentNode;p&&p.nodeName=="PICTURE"&&p.querySelectorAll("source").forEach(function(s){c(s.outerHTML)&&s.remove()})}'
+			. 'function F(i){var o={};if(i.complete&&i.naturalWidth&&c(i.currentSrc))return;'
+			. 'i.onerror&&i.onerror.call(o);o=o.src;if(!o&&c(i.getAttribute("src")))return;Q(i);'
+			. '["srcset","data-srcset","data-lazy-srcset"].forEach(function(a){c(i.getAttribute(a))&&i.removeAttribute(a)});'
+			. 'o&&["src","data-src","data-lazy-src"].forEach(function(a){c(i.getAttribute(a))&&i.setAttribute(a,o)})}'
+			. 'function G(n){n.nodeType==1&&(n.nodeName=="IMG"?[n]:n.nodeName=="SOURCE"?[n.parentNode&&n.parentNode.querySelector("img")]:n.querySelectorAll("img")).forEach(function(i){i&&x(i)&&F(i)})}'
+			. 'function D(n){n&&M(1);if(!w.__nimbocdnDown){w.__nimbocdnDown=1;G(d.documentElement);'
+			. 'new MutationObserver(function(R){R.forEach(function(r){r.addedNodes.length?r.addedNodes.forEach(G):G(r.target)})})'
+			. '.observe(d.documentElement,{childList:1,subtree:1,attributes:1,attributeFilter:["src","srcset","data-src","data-srcset","data-lazy-src","data-lazy-srcset"]})}}'
+			. 'function P(){if(!p){p=1;var A=new AbortController;setTimeout(function(){A.abort()},' . (int) self::WATCHDOG_PING_MS . ');'
+			. 'fetch("https:"+Z+"?nimbocdn-ping="+T,{mode:"no-cors",cache:"no-store",credentials:"omit",signal:A.signal})'
+			. '.then(function(){M(0)},function(){k()||D(1)})}}'
+			. 'd.addEventListener("error",function(e){var i=e.target;try{if(i.nodeName=="IMG"&&x(i)){Q(i);'
+			. '++E>=' . (int) self::WATCHDOG_ERRORS . '&&!k()&&(D(),P())}}catch(e){}},!0);'
+			. 'function C(){try{for(var L=d.images,n=L.length,q,i,r;n--;)if(x(i=L[n])){'
+			. 'if(i.complete&&i.naturalWidth&&c(i.currentSrc))return;r=i.getBoundingClientRect();'
+			. 'i.complete||i.loading=="lazy"&&!(r.bottom>0&&r.top<innerHeight)||(q=1)}q&&P()}catch(e){}}'
+			. 'm[1]>T?m[0]=="1"?D():d.addEventListener("DOMContentLoaded",function(){setTimeout(C,' . (int) self::WATCHDOG_WAIT_MS . ')}):P()'
+			. '}catch(e){}})(window,document);';
 	}
 
 	private static function rewrite_html( $html ) {

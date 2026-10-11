@@ -532,6 +532,8 @@ class Settings {
 		$paused = Settings_Store::is_paused();
 		update_option( 'nimbocdn_paused', ! $paused, false );
 
+		Page_Cache::purge();
+
 		Probe::run();
 
 		self::back( $paused ? 'resumed' : 'paused' );
