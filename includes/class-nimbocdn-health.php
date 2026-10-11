@@ -105,6 +105,10 @@ class Health {
 
 		update_option( 'nimbocdn_health_failures', 0, false );
 
+		if ( isset( $body['es_block']['blocked'] ) && is_bool( $body['es_block']['blocked'] ) && Es_Block::applies() ) {
+			Es_Block::record( $body['es_block']['blocked'], isset( $body['es_block']['since'] ) && is_string( $body['es_block']['since'] ) ? $body['es_block']['since'] : '' );
+		}
+
 		Probe::run( $wait, $probe_budget );
 
 		$verdict = self::refresh_account();

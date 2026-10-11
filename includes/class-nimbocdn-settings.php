@@ -603,6 +603,17 @@ class Settings {
 		);
 	}
 
+	private static function render_es_block() {
+		if ( ! Es_Block::is_active() ) {
+			return;
+		}
+		printf(
+			'<div class="notice notice-info nimbocdn-es-block-notice"><p><strong>%s</strong> %s</p></div>',
+			esc_html__( 'Blocking in Spain detected.', 'nimbocdn' ),
+			esc_html__( 'Your images are being served from your own server for now; NimboCDN comes back on its own when the blocking ends.', 'nimbocdn' )
+		);
+	}
+
 	private static function render_notice() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only display of an outcome code, changes nothing.
 		$code = isset( $_GET['nimbocdn_notice'] ) ? sanitize_key( wp_unslash( $_GET['nimbocdn_notice'] ) ) : '';
@@ -675,6 +686,7 @@ class Settings {
 
 			<?php self::render_notice(); ?>
 			<?php self::render_unverified(); ?>
+			<?php self::render_es_block(); ?>
 
 			<?php
 			ob_start();

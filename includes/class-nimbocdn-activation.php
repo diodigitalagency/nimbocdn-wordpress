@@ -218,6 +218,7 @@ class Activation {
 		wp_clear_scheduled_hook( Settings_Store::FIRST_RUN_HOOK );
 		wp_clear_scheduled_hook( Home::HOOK );
 		wp_clear_scheduled_hook( Challenge::SWEEP_HOOK );
+		wp_clear_scheduled_hook( Es_Block::HOOK );
 		Challenge::sweep();
 		if ( Settings_Store::is_registered() ) {
 			Page_Cache::purge();

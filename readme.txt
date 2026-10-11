@@ -4,7 +4,7 @@ Tags: image optimization, optimize images, webp, avif, image cdn
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.9
+Stable tag: 1.0.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,8 @@ This plugin is a connector for **NimboCDN**, a hosted image delivery service ope
 
 **Health, account and home-page sync — from the background and from the settings screen.** Twice a day by WP-Cron, when you press *Measure now* (at most once a minute), when you open or return to the settings screen, and when your home page changes, the plugin sends your site identifier to `/health`, `/account` and `/site/home` on the same host. The last one carries the list of image files your home page uses and the HTML of your home page as your own server returns it, so the service can verify them — by visiting your home page, or, when a firewall or antibots blocks that visit, against the HTML the plugin sent — and answer which ones it will serve. The response says whether the service is available, which delivery hostname to use, your plan and allowance, and the delivery statistics shown on the settings screen. No visitor data and nothing about your posts other than your public home page is sent.
 
+**Spain block check — every five minutes, only on sites with a Spanish audience.** WP-Cron asks `/v1/es-block` on the same host whether Spanish providers block the delivery network now. Nothing about your site is sent. Only the service reads the public source, https://hayahora.futbol.
+
 **Image delivery — when a visitor loads a page.** The visitor's browser requests images from the delivery hostname (currently `cdn.nimbocdn.net`). That request carries the URL of the original image, the size of the file WordPress would otherwise have served, and the browser's own `Accept` header, as any image request does. For each image served, the edge records the delivered size, format and cache state against your site identifier — sampled on busy sites — never the visitor's IP address, user agent or page. When a request is refused (for example, a signature that does not match), the edge also records the URL of the refused original so the refusal can be investigated; that URL is a file path on your own site. The plugin itself makes no network call during a page view. To notice when a visitor cannot reach the delivery hostname, the page asks `https://<delivery host>/?nimbocdn-ping=<time>` at most once an hour, without cookies, and keeps the answer in that browser for an hour.
 
 **Network card — when you open the settings screen.** Your browser asks `https://<delivery host>/whoami` four times: the first request only opens the connection, the next three are timed and the fastest is shown. A failed request is retried once. The answer names the data center that served the request and the approximate city of your own IP address, so the screen can show where your images are delivered from, and in how many milliseconds, for that computer. Nothing is stored.
@@ -140,8 +142,6 @@ The icons in the settings screen — the crown on the Pro badge, the handshake o
 Copyright (c) 2020-2026 Paweł Kuna — https://tabler.io/icons
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the above copyright notice and this permission notice being included in all copies or substantial portions of the Software.
-
-The SVG paths are inlined in the settings screen rather than shipped as files: there are a handful of them, and an `<img>` would cost a request per page load for a few hundred bytes of path.
 
 == Installation ==
 
@@ -220,7 +220,11 @@ It should not. The plugin only rewrites image attributes, and cached HTML contai
 
 = Does it add JavaScript or CSS to my pages? =
 
-No CSS. On pages with images delivered by NimboCDN it adds one small inline script, about 2.6 KB, at the top of the page. While your images arrive normally it changes nothing. If a visitor's network cannot reach ours — some internet providers block Cloudflare addresses during football broadcasts — it loads that visitor's images from your own server within about two seconds, and at once on the pages they open next, for an hour. It never loads lazy images early and sends nothing about the visitor. Developers can switch it off with the `nimbocdn_hang_watchdog` filter. The settings screen has its own script, on that screen only.
+No CSS. On pages with images delivered by NimboCDN it adds one small inline script, about 3 KB, at the top of the page. While your images arrive normally it changes nothing. If a visitor's network cannot reach ours — some internet providers block Cloudflare addresses during football broadcasts — it loads that visitor's images from your own server within about two seconds, and at once on the pages they open next, for an hour; the large photo of a lightbox or a product zoom opens from your server too. It never loads lazy images early and sends nothing about the visitor. Developers can switch it off with the `nimbocdn_hang_watchdog` filter. The settings screen has its own script, on that screen only.
+
+= My site is in Spain. What happens during football-broadcast blocks? =
+
+By court order, Spanish internet providers block Cloudflare addresses for hours on weekends, and the image network's can be among them. On sites with a Spanish audience — WooCommerce store country Spain, a Madrid, Canary Islands or Ceuta time zone, or the site in Spanish (Spain), Catalan, Basque or Galician — the plugin asks the service every five minutes whether that is happening. While it is, your pages are served with your own images, exactly as without NimboCDN, your page cache is emptied when the block starts and again when it ends, and the settings screen says so. If the answer has not been confirmed for three hours, the plugin goes back to normal. The service learns about the blocks from the public measurements of https://hayahora.futbol; your site never contacts it. Developers can force this on or off with the `nimbocdn_es_block_mode` filter.
 
 = What happens if I deactivate or uninstall it? =
 
@@ -264,6 +268,10 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 6. The free plan: your home page optimized forever, and it says plainly which images WordPress is still serving.
 
 == Changelog ==
+
+= 1.0.10 =
+* Stores in Spain no longer look stuck during football-broadcast blocks. By court order, Spanish internet providers block Cloudflare addresses for hours on weekends, the image network's among them. Found on 10 and 11 October 2026 on a store in Spain: the photos came from the store's own server within seconds, but requests the browser had already opened to the image network hung and the page never finished loading. Now, on sites with a Spanish audience (WooCommerce store country, site time zone or site language), the plugin asks the service every five minutes whether the block is on. While it is, pages are served with your own images, exactly as without NimboCDN, and your page cache is emptied when the block starts and again when it ends. The settings screen says so while it lasts. Your own pause setting is never touched, and developers can force the mode on or off with the `nimbocdn_es_block_mode` filter.
+* When a visitor's network cannot reach the image network, clicking or zooming a product photo now opens the large photo from your own server too. Before, the page's photos came from your server, but the lightbox and the zoom still asked the image network and never opened.
 
 = 1.0.9 =
 * When a visitor's network cannot reach the image network, every photo now comes from your own server, including the ones that had no fallback of their own. Some page builders, Elementor among them, output images without the fallback the plugin adds, and those photos stayed blank. Found on 11 October 2026 on a store's home page during a football-broadcast block: 9 of 25 photos, the main one among them, never appeared. Measured in Chrome with that connection simulated: all of them now arrive from your server 2.4 seconds after the page, and about 0.2 seconds after it on the next page. Those photos load at their original size, since it is the only copy at hand; while your images arrive normally nothing changes on the page.
@@ -392,6 +400,9 @@ Through the plugin's support forum on WordPress.org, or by email at hello@nimboc
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.10 =
+Stores in Spain no longer look stuck during football-broadcast blocks: while Spanish providers block the image network, pages are served with your own images. Update at any time.
 
 = 1.0.9 =
 When a visitor's network cannot reach the image network, photos that page builders output without a fallback now come from your own server too, instead of staying blank. Update at any time.

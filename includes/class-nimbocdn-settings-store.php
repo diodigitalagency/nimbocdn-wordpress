@@ -21,6 +21,7 @@ class Settings_Store {
 		'nimbocdn_probe_lock',
 		'nimbocdn_marketing',
 		'nimbocdn_page_cache_purge',
+		'nimbocdn_es_block',
 	);
 
 	const TRANSIENTS = array( 'nimbocdn_health', 'nimbocdn_activated', 'nimbocdn_first_run_token', 'nimbocdn_home_dirty', 'nimbocdn_challenge', 'nimbocdn_challenge_file', 'nimbocdn_check_cooldown' );

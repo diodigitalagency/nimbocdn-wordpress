@@ -19,6 +19,7 @@ function nimbocdn_uninstall_cleanup() {
 	wp_clear_scheduled_hook( Settings_Store::FIRST_RUN_HOOK );
 	wp_clear_scheduled_hook( 'nimbocdn_home_sync' );
 	wp_clear_scheduled_hook( 'nimbocdn_challenge_sweep' );
+	wp_clear_scheduled_hook( 'nimbocdn_es_block_check' );
 }
 
 nimbocdn_uninstall_cleanup();

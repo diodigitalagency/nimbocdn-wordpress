@@ -60,7 +60,7 @@ class Api {
 		);
 	}
 
-	public static function get( $path, array $query = array() ) {
+	public static function get( $path, array $query = array(), $timeout = 5 ) {
 		$url = self::base() . $path;
 		if ( ! empty( $query ) ) {
 			$url = add_query_arg( array_map( 'rawurlencode', $query ), $url );
@@ -69,7 +69,7 @@ class Api {
 		$response = wp_remote_get(
 			$url,
 			array(
-				'timeout'     => 5,
+				'timeout'     => max( 1, (int) $timeout ),
 				'redirection' => 2,
 				'headers'     => array( 'Accept' => 'application/json' ),
 			)
