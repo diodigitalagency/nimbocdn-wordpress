@@ -184,10 +184,10 @@ class Rewriter {
 
 	public static function filter_output( $html ) {
 		if ( ! defined( 'NIMBOCDN_PROFILE' ) || ! NIMBOCDN_PROFILE ) {
-			return self::with_watchdog( self::rewrite_html( $html ) );
+			return self::safe_pass( $html );
 		}
 		$t0  = microtime( true );
-		$out = self::with_watchdog( self::rewrite_html( $html ) );
+		$out = self::safe_pass( $html );
 		if ( false !== stripos( $out, '</html>' ) ) {
 			$out .= sprintf(
 				"\n<!-- nimbocdn pass=%.1fms in=%d kB -->",
@@ -196,6 +196,18 @@ class Rewriter {
 			);
 		}
 		return $out;
+	}
+
+	private static function safe_pass( $html ) {
+		try {
+			return self::with_watchdog( self::rewrite_html( $html ) );
+		} catch ( \Throwable $e ) {
+			if ( doing_filter( 'wp_template_enhancement_output_buffer' ) ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error -- el mismo aviso que deja el núcleo cuando un filtro de su búfer lanza; su manejador lo registra y no lo imprime.
+				trigger_error( esc_html( 'NimboCDN: ' . get_class( $e ) . ': ' . $e->getMessage() ), E_USER_WARNING );
+			}
+			return $html;
+		}
 	}
 
 	private static function with_watchdog( $html ) {
@@ -710,7 +722,7 @@ class Rewriter {
 			return null;
 		}
 		$path = rawurldecode( $path );
-		if ( false !== strpos( $path, '..' ) ) {
+		if ( false !== strpos( $path, '..' ) || false !== strpos( $path, "\0" ) ) {
 			return null;
 		}
 		$host = wp_parse_url( $url, PHP_URL_HOST );
@@ -764,7 +776,7 @@ class Rewriter {
 			return null;
 		}
 		$path = rawurldecode( $path );
-		if ( 0 !== strpos( $path, $base . '/' ) || false !== strpos( $path, '..' ) ) {
+		if ( 0 !== strpos( $path, $base . '/' ) || false !== strpos( $path, '..' ) || false !== strpos( $path, "\0" ) ) {
 			return null;
 		}
 		$file = WP_CONTENT_DIR . substr( $path, strlen( $base ) );
@@ -911,6 +923,9 @@ class Rewriter {
 			return null;
 		}
 		$path = rawurldecode( $path );
+		if ( false !== strpos( $path, "\0" ) ) {
+			return null;
+		}
 
 		$uploads = wp_upload_dir();
 		$base    = wp_parse_url( $uploads['baseurl'], PHP_URL_PATH );
@@ -1026,6 +1041,9 @@ class Rewriter {
 	}
 
 	public static function filter_attributes( $attr, $attachment, $size ) {
+		if ( ! is_object( $attachment ) || empty( $attachment->ID ) ) {
+			return $attr;
+		}
 		if ( ! self::should_rewrite() || empty( $attr['src'] ) ) {
 			return $attr;
 		}

@@ -689,7 +689,7 @@ class Probe {
 
 	private static function reference_bytes( $url, $baseline ) {
 		$query = wp_parse_url( $url, PHP_URL_QUERY );
-		if ( is_string( $query ) ) {
+		if ( is_string( $query ) && false === strpos( $query, "\0" ) ) {
 			parse_str( $query, $q );
 			if ( isset( $q['w'] ) && (int) $q['w'] > 0 ) {
 				return (int) $q['w'];
@@ -791,7 +791,7 @@ class Probe {
 
 	private static function wordpress_bytes( $origin_url ) {
 		$path = wp_parse_url( $origin_url, PHP_URL_PATH );
-		if ( ! is_string( $path ) || '' === $path ) {
+		if ( ! is_string( $path ) || '' === $path || false !== strpos( $path, "\0" ) ) {
 			return 0;
 		}
 
